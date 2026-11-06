@@ -27,6 +27,19 @@ Sous 9,0 : Testing (7,8) et Accessibility (8,2).
 
 21 constats positifs (tokens, stockage protégé, `cqi`, organisation des dossiers, règles pures, composants, dialogue natif, texte des règles, région de statut, horloge et tirage maîtrisés dans les tests, couverture souris, clavier et doigt, README, commits, notes « rouge avant le correctif »).
 
+## Corrections (v1.0.3, accord de Koya : « Oui, corrige »)
+
+| # | Commit | Test |
+|---|---|---|
+| R1 | `test: calcule le score attendu partie après partie dans S1 et S2` | S1 vérifie la suite des scores (1, 0, 0) |
+| R2 | `docs: dit où le nouveau score est annoncé, à côté du score` | S2 (annonce avec le score) |
+| R3 | `fix: contour au clavier sur la zone du jeu et la fenêtre des règles` | A7 à 375 et 1440, rouge avant le correctif |
+| R4 | `chore: retire les originaux du starter remplacés par leurs copies corrigées AA` | fitness ADR-0008, rouge avant le retrait |
+| R5 | `refactor: stockage de la version et des scores dans src/lib/storage.js` | fitness ADR-0007, rouge avant le déplacement |
+| R6 | `docs(readme): résume le jeu, la pile et les tests en tête` | — |
+
+222 tests Playwright et 7 unitaires verts en local. Planche des états Penpot mise à jour (contour au clavier).
+
 ## Proposition
 
 Corriger R1 à R6 en v1.0.3 (un commit par remarque, tests ajoutés), rejouer la suite en local puis en ligne, pousser et publier, puis « Regenerate report » (1 crédit) : chaque étape avec l'accord de Koya.

@@ -2,6 +2,25 @@
 
 Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) · Versions : [SemVer](https://semver.org/lang/fr/).
 
+## [1.0.3] — 2026-11-06
+
+Corrections après le rapport IA de Frontend Mentor (9,3 / 10 ; `specs/analyse/2026-11-06-rapport-ia.md`), un commit par remarque.
+
+### Added
+- Résumé en tête du README : le site et les deux versions, la pile, la commande des tests (R6).
+- Fitness functions : seul `src/lib/storage.js` touche au stockage (ADR-0007) ; aucun SVG corrigé n'a d'original en double dans `images/` (ADR-0008).
+
+### Changed
+- S1 et S2 calculent le score attendu partie après partie : il se cumule, Play Again ne le remet pas à zéro (R1).
+- `Header.svelte` dit où le nouveau score est annoncé : avec le résultat, dans la région de statut (R2).
+- Stockage de la version et des scores dans `src/lib/storage.js` ; `game.svelte.js` garde l'état et le déroulé (R5).
+
+### Fixed
+- La zone du jeu et la fenêtre des règles, focalisées par le script, montrent un contour au clavier (blanc ; Navy à l'intérieur de la page des règles sur mobile) ; aucun à la souris (R3, A7). Test ajouté, rouge avant le correctif.
+
+### Removed
+- Les originaux du starter `icon-close.svg`, `image-rules.svg` et `image-rules-bonus.svg`, remplacés par leurs copies corrigées AA de `src/assets/` (R4).
+
 ## [1.0.2] — 2026-11-06
 
 Second correctif trouvé en rejouant S3 cinq fois sur le site en ligne (v1.0.1 : 217 / 217 en un passage, mais 10 échecs sur 15 en répétant S3).
