@@ -152,7 +152,8 @@ Animations : à l'étape 3, le jeton de la maison apparaît en grandissant (300 
 | Élément | Rôle | Nom |
 |---|---|---|
 | En-tête | banner | heading (1) contenant img « Rock Paper Scissors » (Lizard-Spock : « Rock Paper Scissors Lizard Spock ») ; le texte « Score » suivi du score |
-| Étape 1 | button | « Paper », « Scissors », « Rock » (Lizard-Spock : et « Lizard », « Spock ») |
+| Étape 1 | group · button | « Pick a sign » (v1.0.4) · « Paper », « Scissors », « Rock » (Lizard-Spock : et « Lizard », « Spock ») |
+| Étapes 2 à 4 | group | « Game » (v1.0.4) : la zone du jeu, qui reçoit le focus après le choix |
 | Étapes 2 à 4 | figure | « You Picked » : img du signe (« Paper »…) ; « The House Picked » : à l'étape 2 aucune image, ensuite img du signe |
 | Étape 4 | heading (2) · button | « You Win », « You Lose » ou « Draw » · « Play Again » |
 | Annonces | status | « You picked Paper. The house is picking. » (étape 2) ; « You picked Paper, the house picked Rock: you win. Score 13 » (« you lose », « draw ») ; « Lizard-Spock. Score 3 » ou « Original. Score 12 » |

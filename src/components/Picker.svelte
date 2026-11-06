@@ -15,7 +15,7 @@
   })
 </script>
 
-<div class="board" data-version={game.version}>
+<div class="board" data-version={game.version} role="group" aria-label="Pick a sign">
   <img class="board-links" src={version.links} alt="" width={version.linksSize[0]} height={version.linksSize[1]} />
   {#each ORDER[game.version] as sign (sign)}
     <Token {sign} onclick={() => pick(sign)} bind:ref={refs[sign]} />

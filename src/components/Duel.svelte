@@ -17,7 +17,7 @@
   })
 </script>
 
-<div class="duel" data-step={game.step} tabindex="-1" bind:this={zone}>
+<div class="duel" data-step={game.step} role="group" aria-label="Game" tabindex="-1" bind:this={zone}>
   <figure class="pick pick-mine">
     <figcaption class="pick-label">You Picked</figcaption>
     <Token sign={game.mine} winner={game.result === 'win'} />

@@ -41,6 +41,22 @@ for (const [name, go] of Object.entries(VIEWS)) {
   })
 }
 
+for (const version of ['original', 'bonus']) {
+  test(`A3 — ${version} : les jetons de l'étape 1 forment le groupe « Pick a sign » ; la zone du jeu, groupe « Game », reçoit le focus après le choix`, async ({ page }) => {
+    await open(page, 1440, 900, { version, clock: true })
+    const pickGroup = main(page).getByRole('group', { name: 'Pick a sign', exact: true })
+    await expect(pickGroup.getByRole('button')).toHaveCount(SIGNS[version].length)
+    await houseWill(page, version, 'Rock')
+    await page.keyboard.press('Tab')
+    await page.keyboard.press('Enter')
+    const game = main(page).getByRole('group', { name: 'Game', exact: true })
+    await expect(game).toBeFocused()
+    await expect(game.getByRole('figure')).toHaveCount(2)
+    await page.clock.runFor(1500)
+    await expect(game.getByRole('heading', { level: 2 })).toHaveCount(1)
+  })
+}
+
 test('A5 — « Rules » annonce qu\'il ouvre un dialogue, et l\'ouvre', async ({ page }) => {
   await open(page, 1440, 900)
   await expect(rulesButton(page)).toHaveAttribute('aria-haspopup', 'dialog')
