@@ -2,6 +2,19 @@
 
 Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) · Versions : [SemVer](https://semver.org/lang/fr/).
 
+## [1.0.4] — 2026-11-06
+
+Après le rapport regénéré sur la v1.0.3 (9,4 ; Testing 8,2, Accessibility 8,7 ; `specs/analyse/2026-11-06-rapport-ia.md`), un commit par changement.
+
+### Added
+- Le choix est annoncé à l'étape 2 (« You picked Paper. The house is picking. ») ; le résultat suit avec le nouveau score (A8).
+- « Rules » annonce qu'il ouvre un dialogue (`aria-haspopup="dialog"`) (A5).
+- Les jetons de l'étape 1 forment le groupe « Pick a sign » ; la zone du jeu, focalisée après le choix, le groupe « Game » (§7).
+
+### Changed
+- `interactions.spec.js` mesure halos, survols et contours depuis la boîte de chaque élément, plus aucune coordonnée écrite en dur (T1).
+- README : sémantique et tests à jour ; 232 tests.
+
 ## [1.0.3] — 2026-11-06
 
 Corrections après le rapport IA de Frontend Mentor (9,3 / 10 ; `specs/analyse/2026-11-06-rapport-ia.md`), un commit par remarque.

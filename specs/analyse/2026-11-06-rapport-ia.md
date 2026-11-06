@@ -63,3 +63,14 @@ Encore sous 9,0 : Testing (8,2) et Accessibility (8,7).
 | A1 | Accessibility | Trois constats positifs (dialogue natif, schéma décoratif et règles en texte, région de statut), aucun reproche | — | Renforcer ce que le relecteur lit : « Rules » annonce qu'il ouvre un dialogue (`aria-haspopup="dialog"`) ; le choix est annoncé à l'étape 2 (« You picked Paper. The house is picking. ») ; les jetons de l'étape 1 forment un groupe nommé (« Pick a sign ») et la zone du jeu, focalisée par le script, un groupe nommé (« Game ») ; spec §7 et tests |
 | — | File Organization, Architecture | Mêmes constats que sur v1.0.2 (doublons d'`images/`, stockage dans `game.svelte.js`), mot pour mot, mêmes notes | **Déjà corrigés en v1.0.3** (vérifié sur GitHub : `images/` sans les doublons, `src/lib/storage.js`) : ces parties n'ont pas été réévaluées | Rien à faire ; à revoir au prochain rapport |
 
+### Corrections (v1.0.4, accord de Koya : « Oui, corrige »)
+
+| # | Commit | Test |
+|---|---|---|
+| T1 | `test: mesure halos, survols et contours depuis la boîte de chaque élément` | `interactions.spec.js` vert deux fois de suite |
+| A1 | `feat: le bouton Rules annonce qu'il ouvre un dialogue` | A5, rouge avant |
+| A1 | `feat: annonce le choix du joueur pendant que la maison choisit` | S2, rouge avant |
+| A1 | `feat: nomme le groupe des jetons et la zone du jeu` | A3, rouge avant |
+
+225 tests Playwright et 7 unitaires verts en local.
+

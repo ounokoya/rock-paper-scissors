@@ -23,9 +23,9 @@ This is a solution to the [Rock, Paper, Scissors challenge on Frontend Mentor](h
 
 - **Play**: [ounokoya.github.io/rock-paper-scissors](https://ounokoya.github.io/rock-paper-scissors/) — Original and Lizard-Spock, with the mouse, a finger or the keyboard; one score per version, kept after a reload
 - **Stack**: Svelte 5, Vite, Tailwind CSS v4, Barlow Semi Condensed served with the site
-- **Tests**: `npm test` — 7 unit tests and 222 Playwright tests; `BASE_URL=https://ounokoya.github.io/rock-paper-scissors/ npx playwright test` runs them on the live site
+- **Tests**: `npm test` — 7 unit tests and 225 Playwright tests; `BASE_URL=https://ounokoya.github.io/rock-paper-scissors/ npx playwright test` runs them on the live site
 
-Rock, Paper, Scissors and its Lizard-Spock version against the computer, built with Svelte 5 and Tailwind CSS v4. Pick a sign with the mouse, a finger or the keyboard; the house picks at random; the result changes the score. Each version keeps its own score, and the score and the chosen version stay after a reload. The layout follows the designs from 320 px to large screens. 229 tests, written from a spec before the code, check it.
+Rock, Paper, Scissors and its Lizard-Spock version against the computer, built with Svelte 5 and Tailwind CSS v4. Pick a sign with the mouse, a finger or the keyboard; the house picks at random; the result changes the score. Each version keeps its own score, and the score and the chosen version stay after a reload. The layout follows the designs from 320 px to large screens. 232 tests, written from a spec before the code, check it.
 
 ### The challenge
 
@@ -58,7 +58,7 @@ Users should be able to:
 
 ### Built with
 
-- Semantic HTML: the game's logo as the only `h1`, the score in the `header`, signs as buttons named after them, the picked signs as two `figure`s named "You Picked" and "The House Picked", the result as an `h2`, a native `<dialog>` for the rules, and a status region that announces each result
+- Semantic HTML: the game's logo as the only `h1`, the score in the `header`, signs as buttons named after them in a group named "Pick a sign", the game area as a group named "Game" with the picked signs as two `figure`s ("You Picked", "The House Picked"), the result as an `h2`, a Rules button that announces its native `<dialog>` (`aria-haspopup`), and a status region that announces the pick, then each result with the new score
 - [Svelte 5](https://svelte.dev/) with runes, as a single page built with [Vite](https://vite.dev/) (no SvelteKit)
 - [Tailwind CSS v4](https://tailwindcss.com/) — tokens from the style guide and the Penpot mockup in `@theme`, default palette removed; hand-written components with logical properties and lengths from `--spacing()`
 - The game rules as pure functions (`src/lib/rules.js`): signs, who beats whom, the house's pick from a random number, the next score, reading saved values
@@ -79,12 +79,12 @@ Before any code, the design was analysed and rebuilt:
 
 ### Tests
 
-229 tests derived from the spec, at two levels:
+232 tests derived from the spec, at two levels:
 
 - **7 unit tests** of the pure game rules (U1–U5) with Node's built-in test runner, no browser: `npm run test:unit` → [`tests/unit/`](./tests/unit/)
-- **222 Playwright tests** of every user flow (S1–S19), on the build (`npm test` runs both levels) and on the live site (`BASE_URL=https://ounokoya.github.io/rock-paper-scissors/ npx playwright test`)
+- **225 Playwright tests** of every user flow (S1–S19), on the build (`npm test` runs both levels) and on the live site (`BASE_URL=https://ounokoya.github.io/rock-paper-scissors/ npx playwright test`)
 
-The tests replace `Math.random` in the page to choose the house's sign, and drive the page's clock to check each step of a game.
+The tests replace `Math.random` in the page to choose the house's sign, and drive the page's clock to check each step of a game. On-screen checks (halos, hover and focus rings) are measured from each element's own box, so they follow the layout; the positions themselves are checked against the designs in `layout.spec.js`.
 
 | What users can do | Scenarios | File |
 |---|---|---|
