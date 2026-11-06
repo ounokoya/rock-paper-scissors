@@ -2,7 +2,7 @@
   import { onMount } from 'svelte'
   import { RULES } from '../lib/rules.js'
   import { NAMES } from '../lib/signs.js'
-  import close from '../assets/icon-close.svg?raw'
+  import closeIcon from '../assets/icon-close.svg?raw'
   import scheme from '../assets/image-rules.svg?raw'
   import schemeBonus from '../assets/image-rules-bonus.svg?raw'
 
@@ -12,11 +12,21 @@
 
   let dialog
   let fromBackdrop = false
+  let closed = false
 
   onMount(() => {
     dialog.showModal()
     dialog.focus()
   })
+
+  // La croix, Échap et le voile ferment tout de suite : l'événement close du navigateur arrive dans une tâche suivante,
+  // et celui d'une fenêtre déjà fermée ne doit rien faire (elle a pu être rouverte entre-temps)
+  function close() {
+    if (closed) return
+    closed = true
+    dialog.close()
+    onclose()
+  }
 
   // Tab et Maj + Tab restent dans le dialogue (A5) : le navigateur laisserait sortir le focus après la croix
   function trap(event) {
@@ -35,15 +45,16 @@
   data-version={version}
   tabindex="-1"
   aria-labelledby="rules-title"
-  onclose={onclose}
+  onclose={close}
+  oncancel={(event) => { event.preventDefault(); close() }}
   onkeydown={trap}
   onpointerdown={(event) => { fromBackdrop = event.target === dialog }}
-  onclick={(event) => { if (fromBackdrop && event.target === dialog) dialog.close() }}
+  onclick={(event) => { if (fromBackdrop && event.target === dialog) close() }}
 >
   <div class="rules-body">
     <h2 id="rules-title" class="rules-title">Rules</h2>
-    <button type="button" class="rules-close" aria-label="Close rules" onclick={() => dialog.close()}>
-      <span class="rules-close-icon" aria-hidden="true">{@html close}</span>
+    <button type="button" class="rules-close" aria-label="Close rules" onclick={close}>
+      <span class="rules-close-icon" aria-hidden="true">{@html closeIcon}</span>
     </button>
     <div class="rules-scheme" aria-hidden="true">{@html version === 'bonus' ? schemeBonus : scheme}</div>
     <ul class="sr-only">

@@ -21,7 +21,7 @@ This is a solution to the [Rock, Paper, Scissors challenge on Frontend Mentor](h
 
 ## Overview
 
-Rock, Paper, Scissors and its Lizard-Spock version against the computer, built with Svelte 5 and Tailwind CSS v4. Pick a sign with the mouse, a finger or the keyboard; the house picks at random; the result changes the score. Each version keeps its own score, and the score and the chosen version stay after a reload. The layout follows the designs from 320 px to large screens. 224 tests, written from a spec before the code, check it.
+Rock, Paper, Scissors and its Lizard-Spock version against the computer, built with Svelte 5 and Tailwind CSS v4. Pick a sign with the mouse, a finger or the keyboard; the house picks at random; the result changes the score. Each version keeps its own score, and the score and the chosen version stay after a reload. The layout follows the designs from 320 px to large screens. 225 tests, written from a spec before the code, check it.
 
 ### The challenge
 
@@ -73,10 +73,10 @@ Before any code, the design was analysed and rebuilt:
 
 ### Tests
 
-224 tests derived from the spec, at two levels:
+225 tests derived from the spec, at two levels:
 
 - **7 unit tests** of the pure game rules (U1–U5) with Node's built-in test runner, no browser: `npm run test:unit` → [`tests/unit/`](./tests/unit/)
-- **217 Playwright tests** of every user flow (S1–S19), on the build (`npm test` runs both levels) and on the live site (`BASE_URL=https://ounokoya.github.io/rock-paper-scissors/ npx playwright test`)
+- **218 Playwright tests** of every user flow (S1–S19), on the build (`npm test` runs both levels) and on the live site (`BASE_URL=https://ounokoya.github.io/rock-paper-scissors/ npx playwright test`)
 
 The tests replace `Math.random` in the page to choose the house's sign, and drive the page's clock to check each step of a game.
 

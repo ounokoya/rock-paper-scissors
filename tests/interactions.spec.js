@@ -173,6 +173,18 @@ test('S3 — règles fermées par la croix, focus déplacé aussitôt : il n\'es
   await expect(switchButton(page, 'original')).toBeFocused()
 })
 
+// S3 : rouvrir les règles aussitôt après les avoir fermées : l'événement close de la fenêtre fermée ne referme pas la nouvelle
+test('S3 — règles fermées puis rouvertes aussitôt : la nouvelle fenêtre reste ouverte', async ({ page }) => {
+  await open(page, 1366, 768)
+  await rulesButton(page).click()
+  await expect(rules(page)).toBeVisible()
+  const reopen = await rulesButton(page).elementHandle()
+  await closeRules(page).evaluate((close, button) => { close.click(); button.click() }, reopen)
+  await page.evaluate(() => new Promise((resolve) => setTimeout(resolve, 50)))
+  await expect(rules(page)).toBeVisible()
+  await expect(rules(page)).toBeFocused()
+})
+
 // A7 : Tab de bout en bout, jamais un nombre fixe de tabulations ; chaque arrêt a son contour de focus
 async function tabRound(page) {
   const stops = []

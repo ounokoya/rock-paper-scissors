@@ -2,6 +2,13 @@
 
 Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) · Versions : [SemVer](https://semver.org/lang/fr/).
 
+## [1.0.2] — 2026-11-06
+
+Second correctif trouvé en rejouant S3 cinq fois sur le site en ligne (v1.0.1 : 217 / 217 en un passage, mais 10 échecs sur 15 en répétant S3).
+
+### Fixed
+- Rouvrir les règles juste après les avoir fermées (Échap puis Entrée) : l'état « règles ouvertes » ne repassait à faux qu'avec l'événement `close`, qui arrive plus tard ; la fenêtre ne se rouvrait pas, ou l'événement tardif refermait la nouvelle. La croix, Échap et le voile ferment désormais tout de suite ; chaque ouverture crée une fenêtre neuve ; l'événement tardif d'une fenêtre déjà fermée est ignoré (A5). Test ajouté, rouge avant le correctif.
+
 ## [1.0.1] — 2026-11-06
 
 Correctif trouvé en rejouant la suite sur le site en ligne (Phase 12 : 214 tests sur 216 ; S3 échouait 6 fois sur 15).

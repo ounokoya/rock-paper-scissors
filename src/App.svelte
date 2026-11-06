@@ -9,6 +9,8 @@
   import { VERSIONS, ICONS } from './lib/signs.js'
 
   let rulesOpen = $state(false)
+  // une fenêtre neuve à chaque ouverture : rouverte aussitôt après une fermeture, elle n'hérite pas de l'ancienne
+  let rulesKey = $state(0)
   let rulesButton
 
   const other = $derived(VERSIONS[game.version === 'original' ? 'bonus' : 'original'].name)
@@ -42,11 +44,13 @@
       {#if game.step === 1}
         <button type="button" class="outline-button outline-button-wide" aria-label="Switch to {other}" onclick={switchVersion}>{other}</button>
       {/if}
-      <button type="button" class="outline-button" bind:this={rulesButton} onclick={() => { rulesOpen = true }}>Rules</button>
+      <button type="button" class="outline-button" bind:this={rulesButton} onclick={() => { rulesKey += 1; rulesOpen = true }}>Rules</button>
     </div>
     <p class="sr-only" role="status">{notice.text}</p>
     {#if rulesOpen}
-      <Rules version={game.version} onclose={closeRules} />
+      {#key rulesKey}
+        <Rules version={game.version} onclose={closeRules} />
+      {/key}
     {/if}
   </main>
 </div>
