@@ -100,3 +100,18 @@ Notes inchangées : global 9,4 ; Testing **8,2** ; Accessibility **8,7** ; le re
 
 `test: tente un second choix et Play Again pendant le déroulé d'une partie` : tests de garde (le jeu bloquait déjà ces tentatives) ; preuve qu'ils peuvent échouer : Play Again affiché pendant le déroulé (S1 et S2 rouges), Entrée sur la zone qui relance la partie (S2 rouge), deux régressions essayées puis retirées. 225 tests Playwright et 7 unitaires verts en local.
 
+## Rapport regénéré sur v1.0.6 (2026-11-06, accord de Koya : « Oui, publie et regénère », 1 crédit)
+
+v1.0.6 poussée (`main`, tag `v1.0.6`) et publiée (`gh-pages`, code du site identique) ; suite rejouée en ligne : **225 / 225**.
+
+| Partie | v1.0.5 | v1.0.6 |
+|---|---|---|
+| **Global** | 9,4 | 9,4 |
+| Testing | 8,2 (3 constats dont T2) | **8,6** (2 constats, tous positifs : T2 a disparu) |
+| Accessibility | 8,7 | 8,7 (mêmes trois constats positifs) |
+| Autres | Best Practices 9,7 · File Organization 9,2 · Architecture 9,5 · README 10,0 · Commits 9,6 | inchangés |
+
+Résumé : « As optional polish, consider adding timed-phase negative interaction tests and separating persistence and timer orchestration as the project grows » — les tests négatifs du déroulé existent depuis v1.0.6 et le stockage est séparé depuis v1.0.3 ; reste, en suggestion, les minuteries hors de `game.svelte.js`.
+
+Bilan des regénérations : Testing 7,8 → 8,2 → 8,2 → 8,2 → **8,6** ; Accessibility 8,2 → **8,7** → 8,7 → 8,7 → 8,7 ; aucun constat négatif ne reste dans ces deux parties.
+
