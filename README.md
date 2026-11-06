@@ -125,7 +125,7 @@ Every part of a token (edge, disc, icon, hover ring, halos) is a fraction of `--
 ### Continued development
 
 - **What the designs leave open.** A draw is not drawn: it uses the result layout with "Draw", no halos and an unchanged score. There is no way to switch versions in the designs: a "Lizard-Spock" / "Original" button sits next to Rules, at step 1 only. The score can go below zero. The desktop designs are slightly off-centre; the layout keeps their positions.
-- **Accessibility.** The rules' close icon is drawn in the dark navy at full opacity (it was 1.5:1), and "BEATS" and the arrows of the rules diagram use `#6b7087` (4.9:1 instead of 2.1:1); the rules are also given as text to screen readers. Every control has a white outline, the result is announced, and nothing moves with reduced motion.
+- **Accessibility.** The rules' close icon is drawn in the dark navy at full opacity (it was 1.5:1), and "BEATS" and the arrows of the rules diagram use `#6b7087` (4.9:1 instead of 2.1:1); the rules are also given as text to screen readers. Every control has a white outline; each result is announced with the new score ("You picked Paper, the house picked Rock: you win. Score 13"), and so is a switch of version; nothing moves with reduced motion.
 - **Next steps.** A short history of the last games, and a way to reset the score.
 
 ### Useful resources

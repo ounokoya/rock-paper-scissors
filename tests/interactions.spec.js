@@ -53,7 +53,7 @@ for (const [w, h] of Object.entries(WIDTHS)) {
     expect(Math.abs(light.lose.mine - light.draw.mine), 'pas de halo derrière mon jeton perdant').toBeLessThanOrEqual(3)
   })
 
-  test(`S2 — clavier seul, ${w} px : trois parties (Entrée, Espace), focus sur Play Again puis sur le jeton choisi, résultats annoncés`, async ({ page }) => {
+  test(`S2 — clavier seul, ${w} px : trois parties (Entrée, Espace), focus sur Play Again puis sur le jeton choisi, chaque résultat annoncé avec le nouveau score`, async ({ page }) => {
     await open(page, width, h, { clock: true })
     await houseWill(page, 'original', 'Rock', 'Rock', 'Rock')
     await page.keyboard.press('Tab')
