@@ -1,6 +1,7 @@
 # Analyse visuelle — Rock, Paper, Scissors
 
 > SDL-FM 1.7.0, Phase 2 (avant G2). Schéma : `rock-paper-scissors-analyse.png` (source `.excalidraw`, canevas partagé x 131 000). Maquettes JPG du starter à l'échelle 1 (desktop 1366 × 768, mobile 375 × 750), mesurées au pixel dans Chromium ; tailles de police calées sur l'encre avec Barlow Semi Condensed (±1 px, affinées en Phase 3). Pas de fichier Figma.
+> **Corrigé en Phase 3** : les tailles ci-dessous sont sous-estimées de 2 px environ (boutons et « PLAY AGAIN » 16 px, libellé du score 14 px, titre des règles 32 px) ; valeurs retenues dans `penpot/maquette.md`.
 
 ## 1. Structure
 
