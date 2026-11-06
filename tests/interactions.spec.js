@@ -159,6 +159,20 @@ for (const [w, h] of Object.entries(WIDTHS)) {
   })
 }
 
+// S3 : à la fermeture, le navigateur rend le focus à « Rules » ; l'événement close, qui arrive après, ne doit pas le reprendre
+// si le focus a déjà bougé (course vue sur le site en ligne)
+test('S3 — règles fermées par la croix, focus déplacé aussitôt : il n\'est pas repris par « Rules »', async ({ page }) => {
+  await open(page, 1366, 768)
+  await rulesButton(page).focus()
+  await page.keyboard.press('Enter')
+  await expect(rules(page)).toBeFocused()
+  const other = await switchButton(page, 'original').elementHandle()
+  await closeRules(page).evaluate((close, next) => { close.click(); next.focus() }, other)
+  await expect(rules(page)).toBeHidden()
+  await page.evaluate(() => new Promise((resolve) => setTimeout(resolve, 50)))
+  await expect(switchButton(page, 'original')).toBeFocused()
+})
+
 // A7 : Tab de bout en bout, jamais un nombre fixe de tabulations ; chaque arrêt a son contour de focus
 async function tabRound(page) {
   const stops = []

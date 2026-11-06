@@ -2,6 +2,13 @@
 
 Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) · Versions : [SemVer](https://semver.org/lang/fr/).
 
+## [1.0.1] — 2026-11-06
+
+Correctif trouvé en rejouant la suite sur le site en ligne (Phase 12 : 214 tests sur 216 ; S3 échouait 6 fois sur 15).
+
+### Fixed
+- Fermer les règles : le navigateur rend le focus à « Rules », puis l'événement `close`, qui arrive après, le reprenait, même si le focus avait déjà bougé (Maj + Tab juste après la fermeture). « Rules » ne reprend plus le focus que s'il s'est perdu (A5). Test ajouté, rouge avant le correctif.
+
 ## [1.0.0] — 2026-11-06
 
 Première version (SDL-FM 1.7.0, Advanced gratuit, maquettes JPG et Penpot, sans fichier Figma).

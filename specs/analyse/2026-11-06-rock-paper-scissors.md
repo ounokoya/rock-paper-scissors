@@ -61,3 +61,8 @@ Mesures des tests corrigées (le test se trompait, pas le jeu) : axe-core attend
 - Précaution (aucune zone vide vue en local) : le logo et les liens de l'autre version, les icônes de Lizard-Spock et la croix des règles ne se chargeaient qu'à leur premier affichage. Elles sont chargées d'avance au démarrage, et la croix est intégrée à la page : en ligne, aucune image ne manquera à l'ouverture des règles ou au changement de version.
 
 **Verdict : conforme.** Phase 9 (README).
+
+## 4. Site en ligne (Phase 12)
+
+`https://ounokoya.github.io/rock-paper-scissors/` (branche `gh-pages`, v1.0.0) : `BASE_URL=… npx playwright test --workers=2` → **214 / 216** en 170 s. Les deux échecs, dans S3, venaient d'une course que le serveur local cachait : en fermant le dialogue, le navigateur rend le focus à « Rules » ; l'événement `close` arrive ensuite, dans une autre tâche, et le code redonnait le focus à « Rules » même si le test (ou l'utilisateur) l'avait déjà déplacé ; S3 échouait 6 fois sur 15 en ligne. Test ajouté, rouge avant le correctif (focus déplacé aussitôt après la croix) ; « Rules » ne reprend plus le focus que s'il s'est perdu. v1.0.1 : 217 tests Playwright et 7 unitaires verts en local.
+

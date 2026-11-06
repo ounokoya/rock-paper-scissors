@@ -20,9 +20,11 @@
     for (const src of [...Object.values(VERSIONS).flatMap((v) => [v.logo, v.links]), ...Object.values(ICONS)]) new Image().src = src
   })
 
+  // le navigateur rend déjà le focus à « Rules » en fermant le dialogue ; l'événement close arrive ensuite :
+  // il ne reprend le focus que s'il s'est perdu, jamais s'il a déjà bougé
   function closeRules() {
     rulesOpen = false
-    rulesButton.focus()
+    if (!document.activeElement || document.activeElement === document.body) rulesButton.focus()
   }
 </script>
 
