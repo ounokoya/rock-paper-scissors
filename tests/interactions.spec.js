@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test'
-import { open, outcome, announce, LOGO, TITLE, houseWill, stored, main, logo, token, playAgain, rulesButton, switchButton, rules, closeRules, status, expectScore, expectStep, focusWithin, settled, lum, pixel, count, ink, WHITE } from './helpers.js'
+import { open, outcome, announce, LOGO, TITLE, houseWill, stored, main, logo, token, playAgain, rulesButton, switchButton, rules, closeRules, status, expectScore, expectStep, focusWithin, settled, lum, pixel, count, ink, pageBox, WHITE } from './helpers.js'
 
 // Spec §6 et §8 — en tête, les parties menées au bout (S1 à la souris et au doigt, S2 au clavier seul, S3 règles, S4 versions),
 // à 375, 768 et 1440 px ; puis survols et focus (S14), mouvements (S15)
@@ -15,14 +15,17 @@ for (const [w, h] of Object.entries(WIDTHS)) {
   const width = Number(w)
 
   test(`S1 — souris, ${w} px : gagner, perdre, égalité, chaque fois Play Again ; étapes dans l'ordre, score à l'écran et gardé, halos du gagnant`, async ({ page }) => {
-    await open(page, width, h)
+    // horloge de la page avancée par le test : chaque étape est vue à coup sûr (le rythme est vérifié par S10)
+    await open(page, width, h, { clock: true })
     await expectScore(page, 0)
     const light = {}
     for (const [mine, theirs, score] of GAMES) {
       await houseWill(page, 'original', theirs)
       await token(page, mine).click()
       await expectStep(page, 2, { mine })
+      await page.clock.runFor(1000)
       await expectStep(page, 3, { mine, theirs })
+      await page.clock.runFor(500)
       await expectStep(page, 4, { mine, theirs })
       await expectScore(page, score)
       expect((await stored(page)).original).toBe(String(score))
@@ -41,7 +44,7 @@ for (const [w, h] of Object.entries(WIDTHS)) {
   })
 
   test(`S2 — clavier seul, ${w} px : trois parties (Entrée, Espace), focus sur Play Again puis sur le jeton choisi, résultats annoncés`, async ({ page }) => {
-    await open(page, width, h)
+    await open(page, width, h, { clock: true })
     await houseWill(page, 'original', 'Rock', 'Rock', 'Rock')
     await page.keyboard.press('Tab')
     await expect(token(page, 'Paper')).toBeFocused()
@@ -52,6 +55,7 @@ for (const [w, h] of Object.entries(WIDTHS)) {
       await expectStep(page, 2, { mine })
       // le focus n'est pas perdu : il est dans la zone du jeu
       await expect.poll(() => focusWithin(main(page))).toBe(true)
+      await page.clock.runFor(1500)
       await expect(playAgain(page)).toBeFocused()
       const r = outcome('original', mine, theirs)
       await expectStep(page, 4, { mine, theirs })
@@ -210,13 +214,15 @@ for (const [name, box, locate] of [['Rules', RULES_BOX, rulesButton], ['choix de
     expect(lum(await pixel(page, ...inside)) - before, 'fond de survol').toBeGreaterThan(10)
     expect(await pageSize(page)).toEqual(size)
     await page.mouse.move(1, 1)
-    const ring = range(box.x - 6, box.x - 1)
-    expect(await maxLum(page, ring, box.y + box.height / 2), 'sans focus').toBeLessThan(120)
+    // contour de 3 px décalé de 2 px : de 5 à 3 px à gauche du bouton (son filet n'en fait pas partie)
+    const b = await pageBox(locate(page))
+    const ring = range(Math.floor(b.x) - 5, Math.floor(b.x) - 3)
+    expect(await maxLum(page, ring, b.y + b.height / 2), 'sans focus').toBeLessThan(120)
     await locate(page).focus()
     await page.keyboard.press('Shift+Tab')
     await page.keyboard.press('Tab')
     await expect(locate(page)).toBeFocused()
-    expect(await maxLum(page, ring, box.y + box.height / 2), 'contour de focus').toBeGreaterThan(200)
+    expect(await maxLum(page, ring, b.y + b.height / 2), 'contour de focus').toBeGreaterThan(200)
   })
 }
 
@@ -233,14 +239,15 @@ test('S14 — Play Again : texte Red 800 au survol, navy au repos ; contour blan
   await playAgain(page).hover()
   expect(await count(page, box, red), 'texte rouge au survol').toBeGreaterThan(30)
   await page.mouse.move(1, 1)
-  const ring = range(box.x - 6, box.x - 1)
-  expect(await maxLum(page, ring, box.y + box.height / 2), 'sans contour après un clic').toBeLessThan(120)
+  const b = await pageBox(playAgain(page))
+  const ring = range(Math.floor(b.x) - 5, Math.floor(b.x) - 3)
+  expect(await maxLum(page, ring, b.y + b.height / 2), 'sans contour après un clic').toBeLessThan(120)
   // au clavier : le focus arrive sur Play Again avec son contour
   await playAgain(page).press('Enter')
   await expect(token(page, 'Paper')).toBeFocused()
   await page.keyboard.press('Enter')
   await expect(playAgain(page)).toBeFocused()
-  expect(await maxLum(page, ring, box.y + box.height / 2), 'contour de focus').toBeGreaterThan(200)
+  expect(await maxLum(page, ring, b.y + b.height / 2), 'contour de focus').toBeGreaterThan(200)
 })
 
 test('S14 — croix des règles : Navy 900 ; contour Navy au focus clavier', async ({ page }) => {

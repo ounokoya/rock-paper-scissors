@@ -107,7 +107,8 @@ for (const [width, height] of [[375, 750], [1366, 768]]) {
       const b = await banner(page).boundingBox()
       const box = await ink(page, { x: b.x + b.width / 2, y: b.y, width: b.width / 2, height: b.height }, WHITE)
       expect(box, 'boîte du score').not.toBeNull()
-      const text = await ink(page, { x: box.x + 1, y: box.y + 1, width: box.width - 2, height: box.height - 2 }, DARK)
+      // sans les coins arrondis (8 px), où le fond sombre apparaît
+      const text = await ink(page, { x: box.x + 1, y: box.y + 8, width: box.width - 2, height: box.height - 16 }, DARK)
       expect(text, 'chiffre du score').not.toBeNull()
       expect(text.x - box.x, 'marge gauche').toBeGreaterThanOrEqual(4)
       expect(box.x + box.width - (text.x + text.width), 'marge droite').toBeGreaterThanOrEqual(4)

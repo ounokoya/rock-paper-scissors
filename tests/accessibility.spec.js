@@ -19,6 +19,8 @@ for (const version of ['original', 'bonus']) {
       test(`S16 — axe-core : ${name}, ${version}, ${width} px`, async ({ page }) => {
         await open(page, width, 900, { version, clock: true })
         await go(page, version)
+        // axe attend ses propres minuteries : l'horloge de la page reprend (la vue peut alors passer à l'étape suivante)
+        await page.clock.resume()
         const { violations } = await new AxeBuilder({ page }).analyze()
         const serious = violations.filter((v) => ['serious', 'critical'].includes(v.impact))
         expect(serious.map((v) => `${v.id} : ${v.nodes.map((n) => n.target).join(', ')}`)).toEqual([])
@@ -33,6 +35,7 @@ for (const [name, go] of Object.entries(VIEWS)) {
     await go(page, 'original')
     await expect(banner(page)).toHaveCount(1)
     await expect(main(page)).toHaveCount(1)
+    await page.clock.resume()
     const { violations } = await new AxeBuilder({ page }).withRules(['region']).analyze()
     expect(violations.map((v) => `${v.id} : ${v.nodes.map((n) => n.target).join(', ')}`)).toEqual([])
   })

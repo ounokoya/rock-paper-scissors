@@ -1,0 +1,703 @@
+/* Barlow Semi Condensed servie avec le site, sous-ensemble latin (ADR-0005) */
+@import "@fontsource/barlow-semi-condensed/latin-600.css";
+@import "@fontsource/barlow-semi-condensed/latin-700.css";
+@import "tailwindcss";
+
+/* Tokens du guide de style et de la bibliothèque Penpot (specs/reference/tokens.md, spec §4), teintes AA de G2 et G3 */
+@theme {
+  --color-*: initial;
+  --color-white: #ffffff;
+  --color-navy: #3b4363;
+  --color-score-label: #2a46c0;
+  --color-score: #565469;
+  --color-hover-text: #9c1633;
+  --color-background-top: #1f3756;
+  --color-background-bottom: #141639;
+  --color-button-bottom: #f3f3f3;
+
+  /* jetons : haut de la face, face (teinte 500), bord */
+  --color-rock-top: #de415e;
+  --color-rock-face: #dc2e4e;
+  --color-rock-edge: #9c1633;
+  --color-paper-top: #5772f5;
+  --color-paper-face: #4865f4;
+  --color-paper-edge: #2a46c0;
+  --color-scissors-top: #eca725;
+  --color-scissors-face: #ec9e0e;
+  --color-scissors-edge: #c56b1b;
+  --color-lizard-top: #8f5fe6;
+  --color-lizard-face: #834fe3;
+  --color-lizard-edge: #5f37a9;
+  --color-spock-top: #4fbed1;
+  --color-spock-face: #40b9ce;
+  --color-spock-edge: #2d8ca9;
+  --color-disc-top: #dbdbdb;
+  --color-disc-bottom: #f1f1f1;
+  --color-disc-shadow: #babfd3;
+
+  /* blancs et noirs transparents : filets, survols, halos, place vide, ombres, voile */
+  --color-header-line: rgb(255 255 255 / 0.29);
+  --color-button-line: rgb(255 255 255 / 0.55);
+  --color-hover: rgb(255 255 255 / 0.1);
+  --color-halo: rgb(255 255 255 / 0.03);
+  --color-place: rgb(0 0 0 / 0.1);
+  --color-shadow: rgb(0 0 0 / 0.2);
+  --color-scrim: rgb(0 0 0 / 0.5);
+
+  --font-sans: "Barlow Semi Condensed", sans-serif;
+}
+
+/* Paliers de la mise en page (ADR-0009) : 48rem = 768 px (desktop), 64rem = 1024 px (résultat entre les jetons),
+   75rem = 1200 px (boutons du bas à côté du jeu) */
+
+@layer base {
+  html {
+    min-block-size: 100%;
+    background: radial-gradient(ellipse 100% 100% at 50% 0%, var(--color-background-top), var(--color-background-bottom));
+  }
+
+  body {
+    font-family: var(--font-sans);
+    color: var(--color-white);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* zone du jeu et dialogue focalisés par le script (§6) : ce ne sont pas des contrôles */
+  .duel:focus,
+  .rules:focus {
+    outline: none;
+  }
+}
+
+@layer components {
+  .page {
+    display: flex;
+    flex-direction: column;
+    min-block-size: 100dvh;
+    padding-block-start: --spacing(7.5);
+  }
+
+  /* En-tête : titre du jeu et score (§3.1) */
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    inline-size: min(44rem, 100% - --spacing(15));
+    block-size: --spacing(25);
+    margin-inline: auto;
+    padding-inline: --spacing(5.25) --spacing(2.75);
+    border: 0.1875rem solid var(--color-header-line);
+    border-radius: 0.5rem;
+  }
+
+  .logo img {
+    display: block;
+    inline-size: --spacing(21.05);
+    block-size: auto;
+  }
+
+  .logo[data-version="bonus"] img {
+    inline-size: --spacing(12.8);
+  }
+
+  .score {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    inline-size: --spacing(20);
+    block-size: --spacing(18);
+    padding-block-start: --spacing(3);
+    border-radius: 0.5rem;
+    background: linear-gradient(var(--color-white), var(--color-button-bottom));
+    box-shadow: 0 0.1875rem 0.1875rem var(--color-shadow);
+  }
+
+  .score-label {
+    font-size: 0.625rem;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0.09375rem;
+    text-transform: uppercase;
+    color: var(--color-score-label);
+  }
+
+  .score-value {
+    margin-block-start: --spacing(0.25);
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--color-score);
+  }
+
+  .score-value[data-length="4"] {
+    font-size: 1.75rem;
+  }
+
+  .score-value[data-length="5"],
+  .score-value[data-length="6"] {
+    margin-block-start: --spacing(1.5);
+    font-size: 1.25rem;
+  }
+
+  .main {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+  }
+
+  /* Étape 1 : plateau à proportions fixes, jetons placés en pourcentage de sa largeur (ADR-0009) */
+  .board {
+    container-type: inline-size;
+    position: relative;
+    inline-size: min(var(--board), 100% - --spacing(16.125));
+    aspect-ratio: 100 / var(--board-height);
+    margin-block-start: var(--board-top);
+    margin-inline: auto;
+  }
+
+  .board[data-version="original"] {
+    --board: 19.40625rem;
+    --board-height: 91;
+    --board-top: --spacing(25.75);
+    --token: 41.55;
+  }
+
+  .board[data-version="bonus"] {
+    --board: 19.4375rem;
+    --board-height: 98;
+    --board-top: --spacing(23.5);
+    --token: 30.55;
+  }
+
+  .board-links {
+    position: absolute;
+    inset-inline-start: calc(var(--links-x) * 1cqi);
+    inset-block-start: calc(var(--links-y) * 1cqi);
+    inline-size: calc(var(--links-w) * 1cqi);
+    block-size: auto;
+  }
+
+  .board .token {
+    --d: calc(var(--token) * 1cqi);
+    position: absolute;
+    inset-inline-start: calc(var(--x) * 1cqi);
+    inset-block-start: calc(var(--y) * 1cqi);
+  }
+
+  /* positions mesurées sur les maquettes mobiles (spec §5) */
+  .board[data-version="original"] {
+    --links-x: 18.36;
+    --links-y: 19.32;
+    --links-w: 63.51;
+
+    [data-sign="paper"] { --x: 0; --y: 0; }
+    [data-sign="scissors"] { --x: 58.45; --y: 0.32; }
+    [data-sign="rock"] { --x: 29.31; --y: 47.99; }
+  }
+
+  .board[data-version="bonus"] {
+    --links-x: 17.2;
+    --links-y: 14.15;
+    --links-w: 65.59;
+
+    [data-sign="scissors"] { --x: 34.73; --y: 0; }
+    [data-sign="paper"] { --x: 69.45; --y: 26.85; }
+    [data-sign="rock"] { --x: 55.31; --y: 66.4; }
+    [data-sign="lizard"] { --x: 13.83; --y: 66.4; }
+    [data-sign="spock"] { --x: 0; --y: 27.17; }
+  }
+
+  /* Jeton (spec §4) : bord décalé vers le bas, face en dégradé, disque blanc, icône du starter */
+  .token {
+    position: relative;
+    display: grid;
+    place-items: center;
+    inline-size: var(--d);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: linear-gradient(var(--top), var(--face));
+    box-shadow: 0 calc(var(--d) * 0.035) 0 var(--edge);
+  }
+
+  .token[data-sign="rock"] { --top: var(--color-rock-top); --face: var(--color-rock-face); --edge: var(--color-rock-edge); --icon: 0.3333; }
+  .token[data-sign="paper"] { --top: var(--color-paper-top); --face: var(--color-paper-face); --edge: var(--color-paper-edge); --icon: 0.3403; }
+  .token[data-sign="scissors"] { --top: var(--color-scissors-top); --face: var(--color-scissors-face); --edge: var(--color-scissors-edge); --icon: 0.3542; --icon-x: -0.0201; }
+  .token[data-sign="lizard"] { --top: var(--color-lizard-top); --face: var(--color-lizard-face); --edge: var(--color-lizard-edge); --icon: 0.4375; }
+  .token[data-sign="spock"] { --top: var(--color-spock-top); --face: var(--color-spock-face); --edge: var(--color-spock-edge); --icon: 0.3125; }
+
+  .token-disc {
+    display: grid;
+    place-items: center;
+    inline-size: calc(var(--d) * 0.7677);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: linear-gradient(var(--color-disc-top), var(--color-disc-bottom));
+    box-shadow: inset 0 calc(var(--d) * 0.035) 0 var(--color-disc-shadow);
+  }
+
+  .token-icon {
+    inline-size: calc(var(--d) * var(--icon));
+    block-size: auto;
+    translate: calc(var(--d) * var(--icon-x, 0)) calc(var(--d) * 0.0174);
+  }
+
+  /* survol : disque blanc à 10 %, 11 % du diamètre plus large ; focus : contour blanc décalé de 7 px (G3-2) */
+  button.token {
+    cursor: pointer;
+
+    &:hover {
+      box-shadow: 0 calc(var(--d) * 0.035) 0 var(--edge), 0 0 0 calc(var(--d) * 0.111) var(--color-hover);
+    }
+
+    &:focus-visible {
+      outline: 0.1875rem solid var(--color-white);
+      outline-offset: 0.4375rem;
+    }
+  }
+
+  /* halos du gagnant (D7) : trois disques blancs à 3 %, rayons 1,45, 1,92 et 2,44 fois celui du jeton */
+  .token-winner::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    border-radius: 50%;
+    box-shadow:
+      0 0 0 calc(var(--d) * 0.225) var(--color-halo),
+      0 0 0 calc(var(--d) * 0.46) var(--color-halo),
+      0 0 0 calc(var(--d) * 0.72) var(--color-halo);
+  }
+
+  /* Étapes 2 à 4 (spec §3.3, §5) */
+  .duel {
+    container-type: inline-size;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas: "mine . house" "outcome outcome outcome";
+    inline-size: min(19.8125rem, 100% - --spacing(14.5));
+    margin-block-start: --spacing(24.375);
+    margin-inline: auto;
+  }
+
+  /* la figure a la largeur de son jeton : un libellé plus large déborde des deux côtés, centré sur le jeton */
+  .pick {
+    --d: 40.69cqi;
+    display: flex;
+    inline-size: var(--d);
+    flex-direction: column-reverse;
+    align-items: center;
+    gap: --spacing(7.25);
+  }
+
+  .pick-mine {
+    grid-area: mine;
+  }
+
+  .pick-house {
+    grid-area: house;
+  }
+
+  .pick-label {
+    font-size: 0.9375rem;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0.1171875rem;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  /* place vide de la maison (étape 2) : disque noir à 10 % */
+  .place {
+    display: grid;
+    place-items: center;
+    inline-size: var(--d);
+    aspect-ratio: 1;
+
+    &::after {
+      content: "";
+      inline-size: 85.3%;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: var(--color-place);
+    }
+  }
+
+  .outcome {
+    grid-area: outcome;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-block-start: --spacing(19.075);
+  }
+
+  .result {
+    font-size: 3.5rem;
+    font-weight: 700;
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  /* Boutons (G3-2) : Play Again blanc, texte rouge au survol ; Rules et choix de version à filet, fond blanc à 10 % au survol */
+  .again,
+  .outline-button {
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: 0.15625rem;
+    text-transform: uppercase;
+    cursor: pointer;
+
+    &:focus-visible {
+      outline: 0.1875rem solid var(--color-white);
+      outline-offset: 0.125rem;
+    }
+  }
+
+  .again {
+    inline-size: --spacing(55);
+    block-size: --spacing(12);
+    margin-block-start: --spacing(5.3);
+    border-radius: 0.5rem;
+    background: linear-gradient(var(--color-white), var(--color-button-bottom));
+    box-shadow: 0 0.1875rem 0.1875rem var(--color-shadow);
+    color: var(--color-navy);
+
+    &:hover {
+      color: var(--color-hover-text);
+    }
+  }
+
+  .outline-button {
+    inline-size: --spacing(32.5);
+    block-size: --spacing(10.5);
+    border: 0.125rem solid var(--color-button-line);
+    border-radius: 0.5rem;
+    color: var(--color-white);
+
+    &:hover {
+      background-color: var(--color-hover);
+    }
+  }
+
+  .outline-button-wide {
+    inline-size: --spacing(45);
+  }
+
+  /* Bas de page : sous le jeu, centré ; jamais par-dessus le jeu */
+  .bar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: --spacing(4);
+    margin-block-start: auto;
+    padding-block: --spacing(8) --spacing(13.75);
+  }
+
+  /* Règles (ADR-0008) : page blanche entière ; titre en haut, schéma au centre, croix en bas */
+  .rules {
+    inline-size: 100%;
+    max-inline-size: none;
+    block-size: 100%;
+    max-block-size: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: var(--color-white);
+    color: var(--color-navy);
+
+    &::backdrop {
+      background: var(--color-scrim);
+    }
+  }
+
+  .rules-body {
+    display: grid;
+    grid-template-areas: "all";
+    min-block-size: max(100%, 34rem);
+  }
+
+  .rules-title {
+    grid-area: all;
+    align-self: start;
+    justify-self: center;
+    margin-block-start: --spacing(23.9);
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .rules-close {
+    grid-area: all;
+    align-self: end;
+    justify-self: center;
+    display: grid;
+    place-items: center;
+    inline-size: --spacing(6);
+    block-size: --spacing(6);
+    margin-block-end: --spacing(15.875);
+    border-radius: 0.25rem;
+    cursor: pointer;
+
+    &:focus-visible {
+      outline: 0.1875rem solid var(--color-navy);
+      outline-offset: 0.125rem;
+    }
+  }
+
+  .rules-scheme {
+    grid-area: all;
+    align-self: center;
+    justify-self: center;
+    inline-size: min(19rem, 100% - --spacing(15));
+
+    svg {
+      display: block;
+      inline-size: 100%;
+      block-size: auto;
+    }
+
+    text {
+      font-family: var(--font-sans);
+      font-weight: 700;
+    }
+  }
+
+  .rules[data-version="bonus"] .rules-scheme {
+    inline-size: min(21.25rem, 100% - --spacing(16));
+  }
+
+  /* Desktop (≥ 768 px) */
+  @media (width >= 48rem) {
+    .page {
+      padding-block-start: --spacing(11.5);
+    }
+
+    .header {
+      inline-size: min(44rem, 100% - --spacing(16));
+      block-size: --spacing(38.5);
+      padding-inline: --spacing(7.25) --spacing(5.75);
+      border-radius: 0.9375rem;
+    }
+
+    .logo img {
+      inline-size: --spacing(40.5);
+    }
+
+    .logo[data-version="bonus"] img {
+      inline-size: --spacing(28.75);
+    }
+
+    .score {
+      inline-size: --spacing(37.5);
+      block-size: --spacing(28.5);
+      padding-block-start: --spacing(4.8);
+    }
+
+    .score-label {
+      font-size: 0.875rem;
+      letter-spacing: 0.1875rem;
+    }
+
+    .score-value {
+      margin-block-start: --spacing(1);
+      font-size: 4rem;
+    }
+
+    .score-value[data-length="4"] {
+      font-size: 3.25rem;
+    }
+
+    .score-value[data-length="5"],
+    .score-value[data-length="6"] {
+      margin-block-start: --spacing(3);
+      font-size: 2.5rem;
+    }
+
+    /* plateaux desktop (spec §5) */
+    .board {
+      inline-size: var(--board);
+    }
+
+    .board[data-version="original"] {
+      --board: 29.75rem;
+      --board-height: 90.75;
+      --board-top: --spacing(15.5);
+      --token: 41.6;
+      --links-x: 17.23;
+      --links-y: 19.12;
+      --links-w: 65.76;
+
+      [data-sign="scissors"] { --x: 58.4; --y: 0; }
+      [data-sign="rock"] { --x: 29.2; --y: 47.69; }
+    }
+
+    .board[data-version="bonus"] {
+      --board: 29.40625rem;
+      --board-height: 98.84;
+      --board-top: --spacing(11.5);
+      --token: 30.61;
+      --links-x: 14.98;
+      --links-y: 16.79;
+      --links-w: 69.93;
+
+      [data-sign="scissors"] { --x: 34.86; --y: 0; }
+      [data-sign="paper"] { --x: 69.39; --y: 27.52; }
+      [data-sign="rock"] { --x: 55.58; --y: 67.06; }
+      [data-sign="lizard"] { --x: 13.6; --y: 67.16; }
+      [data-sign="spock"] { --x: 0; --y: 27.42; }
+    }
+
+    .duel {
+      container-type: normal;
+      grid-template-columns: 18.1875rem 4.625rem 18.1875rem;
+      justify-content: center;
+      inline-size: auto;
+      margin-block-start: --spacing(18.55);
+    }
+
+    .pick {
+      --d: 18.1875rem;
+      flex-direction: column;
+      gap: --spacing(16.825);
+    }
+
+    .pick-label {
+      font-size: 1.5rem;
+      letter-spacing: 0.1875rem;
+    }
+
+    .place::after {
+      inline-size: 77.3%;
+    }
+
+    .outcome {
+      margin-block-start: --spacing(15.575);
+    }
+
+    .bar {
+      flex-direction: row;
+      justify-content: flex-end;
+      padding-block: --spacing(8);
+      padding-inline-end: --spacing(8);
+    }
+
+    .rules {
+      inline-size: --spacing(100);
+      block-size: fit-content;
+      margin: auto;
+      border-radius: 0.5rem;
+    }
+
+    .rules-body {
+      grid-template-columns: 1fr auto;
+      grid-template-areas: "title close" "scheme scheme";
+      align-items: center;
+      min-block-size: 0;
+      padding-block: --spacing(8) --spacing(8.25);
+      padding-inline: --spacing(8) --spacing(7.5);
+    }
+
+    .rules-title {
+      grid-area: title;
+      justify-self: start;
+      margin-block-start: 0;
+    }
+
+    .rules-close {
+      grid-area: close;
+      align-self: center;
+      margin-block-end: 0;
+    }
+
+    .rules-scheme {
+      grid-area: scheme;
+      inline-size: --spacing(76);
+      margin-block-start: --spacing(12);
+    }
+
+    .rules[data-version="bonus"] {
+      .rules-body {
+        padding-block-end: --spacing(11.75);
+      }
+
+      .rules-scheme {
+        inline-size: --spacing(85);
+        margin-block-start: --spacing(5);
+      }
+    }
+  }
+
+  /* ≥ 1024 px : résultat entre les jetons ; la maquette FM décale le jeu vers la gauche */
+  @media (width >= 64rem) {
+    .duel {
+      translate: -0.40625rem;
+    }
+
+    .duel[data-step="4"] {
+      grid-template-columns: 18.1875rem 4.84375rem 13.75rem 3.53125rem 18.1875rem;
+      grid-template-areas: "mine . outcome . house";
+      translate: -0.65625rem;
+    }
+
+    .duel[data-step="4"] .outcome {
+      align-self: start;
+      margin-block-start: --spacing(40.4);
+    }
+  }
+
+  /* ≥ 1200 px : boutons du bas dans le même espace que le jeu, en bas à droite */
+  @media (width >= 75rem) {
+    .main {
+      display: grid;
+      grid-template-areas: "stack";
+    }
+
+    .game,
+    .bar {
+      grid-area: stack;
+    }
+
+    .game {
+      align-self: start;
+    }
+
+    .bar {
+      align-self: end;
+      margin-block-start: 0;
+    }
+  }
+}
+
+/* Mouvements (§6) : seulement sans le réglage « réduire les animations » (A9) */
+@media (prefers-reduced-motion: no-preference) {
+  .token-appear {
+    animation: token-appear 300ms ease-out;
+  }
+
+  .outcome,
+  .token-winner::before {
+    animation: fade-in 300ms ease-out;
+  }
+
+  button.token,
+  .again,
+  .outline-button {
+    transition-property: background-color, color, box-shadow;
+    transition-duration: 150ms;
+  }
+}
+
+@keyframes token-appear {
+  from {
+    opacity: 0;
+    scale: 0.6;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}

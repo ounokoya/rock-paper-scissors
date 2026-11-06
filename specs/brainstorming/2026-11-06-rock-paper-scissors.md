@@ -65,3 +65,7 @@ Koya : « Je valide (G2) ». Analyse : `specs/visuel/rock-paper-scissors-analyse
 ## Maquette validée (G3, 2026-11-06)
 
 Koya : « Je valide (G3) ». Maquette : `specs/visuel/penpot/maquette.md` (fichier Penpot « rock-paper-scissors »). **Tous les points sont retenus** : G3-1 (choix de version à l'étape 1 seulement ; desktop à gauche de Rules, mobile au-dessus), G3-2 (états de survol et de focus), G3-3 (règles AA, anneaux du schéma inchangés), G3-4 (tablette : résultat sous les jetons de 768 à 1023 px), G3-5 (typographies corrigées), G3-6 (seuil visuel de 5 % par écran), G3-7 (égalité « DRAW » sur la mise en page du résultat).
+
+## Verrou du code (2026-11-06)
+
+Koya : « Oui, lève le verrou ». Conditions remplies : G2 et G3 validés ; spec `specs/specifications/rock-paper-scissors.md` ; ADR-0003 à ADR-0011 (`specs/adr/v1.0/`) ; tests écrits avant le code, contrôle rouge fait (202 Playwright : 200 au rouge pour la raison attendue, 2 tests de garde ; 7 unitaires : module absent). **Qui fait quoi :** Claude télécharge `@fontsource/barlow-semi-condensed` 5.3.0 (npm, OFL-1.1, 1,6 Mo) et écrit tout le code de la Phase 6 ; Koya valide ensuite chaque publication, la soumission et la regénération du rapport.
