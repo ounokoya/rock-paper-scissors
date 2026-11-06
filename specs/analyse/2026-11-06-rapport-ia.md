@@ -74,3 +74,11 @@ Encore sous 9,0 : Testing (8,2) et Accessibility (8,7).
 
 225 tests Playwright et 7 unitaires verts en local.
 
+## Rapport regénéré sur v1.0.4 (2026-11-06, accord de Koya : « Oui, publie et regénère », 1 crédit)
+
+v1.0.4 poussée (`main`, tag `v1.0.4`) et publiée (`gh-pages`, servie en 7,5 min) ; suite rejouée en ligne : **225 / 225**.
+
+Notes **identiques** à celles de la v1.0.3 : global 9,4 ; Best Practices 9,7 · File Organization 9,2 · Architecture 9,5 · Testing **8,2** · Accessibility **8,7** · README 10,0 · Commits 9,6. Constats de Testing (2) et d'Accessibility (3) identiques au mot près, tous positifs ; seul le résumé est réécrit, avec la même piste : « keeping visual assertions resilient while retaining meaningful design verification is a worthwhile area of polish ».
+
+Lecture : comme pour File Organization et Architecture au rapport précédent (M60), les parties n'ont pas été réévaluées malgré les changements (T1 réécrit les mesures d'`interactions.spec.js`, A1 ajoute trois éléments d'accessibilité). Le guide FM « Solution Reports Overview » ne dit pas ce que la regénération réévalue.
+
