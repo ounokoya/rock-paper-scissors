@@ -28,6 +28,7 @@ export function pick(sign) {
   game.result = null
   game.refocus = false
   game.step = 2
+  announce(`You picked ${NAMES[sign]}. The house is picking.`)
   timer = setTimeout(() => {
     game.step = 3
     timer = setTimeout(finish, REVEALED)

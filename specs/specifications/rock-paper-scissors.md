@@ -122,7 +122,7 @@ Positions de la maquette (px, coin haut gauche, ou centre noté « c » ; à 2 p
 
 | Événement | Effet |
 |---|---|
-| Choisir un jeton (clic, toucher, Entrée ou Espace) | étape 2 (D4) ; on ne peut plus choisir ; le focus va à la zone du jeu, qui montre son contour au clavier |
+| Choisir un jeton (clic, toucher, Entrée ou Espace) | étape 2 (D4) ; on ne peut plus choisir ; le choix est annoncé (« You picked Paper. The house is picking. », v1.0.4) ; le focus va à la zone du jeu, qui montre son contour au clavier |
 | Étape 4 | le résultat est annoncé (« You picked Paper, the house picked Rock: you win. Score 13 ») ; le focus va à « Play Again » (si les règles sont ouvertes, il y reste ; à leur fermeture, il revient à « Rules ») |
 | « Play Again » | étape 1, même version ; le focus va au jeton choisi à la partie précédente |
 | « Rules » | le dialogue s'ouvre et prend le focus ; Tab reste dedans ; la croix, Échap ou (≥ 768 px) un clic sur le voile le ferment ; le focus revient à « Rules » ; la partie en cours continue derrière |
@@ -143,7 +143,7 @@ Animations : à l'étape 3, le jeton de la maison apparaît en grandissant (300 
 | A5 | Règles : `dialog` modal natif nommé par son titre, qui prend le focus lui-même et le rend à « Rules » |
 | A6 | Contraste AA (4,5:1 ; 3:1 pour les grands textes, les icônes et les contours de focus), survols compris |
 | A7 | Focus visible sur chaque élément interactif, et sur la zone du jeu et la fenêtre des règles quand le script leur donne le focus au clavier ; ordre clavier = ordre de lecture ; une partie entière, les règles et le choix de version se font au clavier seul |
-| A8 | Région de statut : le résultat de chaque partie et le changement de version y sont annoncés (§6) |
+| A8 | Région de statut : le choix (étape 2), le résultat de chaque partie avec le nouveau score et le changement de version y sont annoncés (§6) |
 | A9 | Pas d'animation ni de transition si `prefers-reduced-motion: reduce` |
 | A10 | Le nom accessible du choix de version contient son libellé visible (« Switch to Lizard-Spock » pour « LIZARD-SPOCK ») |
 
@@ -155,7 +155,7 @@ Animations : à l'étape 3, le jeton de la maison apparaît en grandissant (300 
 | Étape 1 | button | « Paper », « Scissors », « Rock » (Lizard-Spock : et « Lizard », « Spock ») |
 | Étapes 2 à 4 | figure | « You Picked » : img du signe (« Paper »…) ; « The House Picked » : à l'étape 2 aucune image, ensuite img du signe |
 | Étape 4 | heading (2) · button | « You Win », « You Lose » ou « Draw » · « Play Again » |
-| Annonces | status | « You picked Paper, the house picked Rock: you win. Score 13 » (« you lose », « draw ») ; « Lizard-Spock. Score 3 » ou « Original. Score 12 » |
+| Annonces | status | « You picked Paper. The house is picking. » (étape 2) ; « You picked Paper, the house picked Rock: you win. Score 13 » (« you lose », « draw ») ; « Lizard-Spock. Score 3 » ou « Original. Score 12 » |
 | Bas de page | button | « Rules » (`aria-haspopup` « dialog », v1.0.4) ; à l'étape 1 « Switch to Lizard-Spock » ou « Switch to Original » |
 | Règles | dialog | « Rules » ; button « Close rules » ; list : une ligne par règle de D1 (« Paper beats Rock »…), 3 ou 10 |
 

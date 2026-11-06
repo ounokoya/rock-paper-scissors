@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test'
-import { open, outcome, announce, LOGO, TITLE, houseWill, stored, main, logo, token, picked, housePicked, playAgain, rulesButton, switchButton, rules, closeRules, status, expectScore, expectStep, focusWithin, settled, lum, pixel, count, ink, WHITE } from './helpers.js'
+import { open, outcome, announce, announcePick, LOGO, TITLE, houseWill, stored, main, logo, token, picked, housePicked, playAgain, rulesButton, switchButton, rules, closeRules, status, expectScore, expectStep, focusWithin, settled, lum, pixel, count, ink, WHITE } from './helpers.js'
 
 // Spec §6 et §8 — en tête, les parties menées au bout (S1 à la souris et au doigt, S2 au clavier seul, S3 règles, S4 versions),
 // à 375, 768 et 1440 px ; puis survols et focus (S14), mouvements (S15)
@@ -63,7 +63,7 @@ for (const [w, h] of Object.entries(WIDTHS)) {
     expect(Math.abs(light.lose.mine - light.draw.mine), 'pas de halo derrière mon jeton perdant').toBeLessThanOrEqual(3)
   })
 
-  test(`S2 — clavier seul, ${w} px : trois parties (Entrée, Espace), focus sur Play Again puis sur le jeton choisi, chaque résultat annoncé avec le nouveau score`, async ({ page }) => {
+  test(`S2 — clavier seul, ${w} px : trois parties (Entrée, Espace), focus sur Play Again puis sur le jeton choisi, le choix puis chaque résultat annoncés, avec le nouveau score`, async ({ page }) => {
     await open(page, width, h, { clock: true })
     await houseWill(page, 'original', 'Rock', 'Rock', 'Rock')
     await page.keyboard.press('Tab')
@@ -76,6 +76,7 @@ for (const [w, h] of Object.entries(WIDTHS)) {
       await expect(token(page, mine)).toBeFocused()
       await page.keyboard.press(keys[mine])
       await expectStep(page, 2, { mine })
+      await expect(status(page)).toHaveText(announcePick(mine))
       // le focus n'est pas perdu : il est dans la zone du jeu
       await expect.poll(() => focusWithin(main(page))).toBe(true)
       await page.clock.runFor(1500)

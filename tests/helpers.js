@@ -17,6 +17,8 @@ export const outcome = (version, mine, theirs) => mine === theirs ? 'draw' : RUL
 export const HEADING = { win: 'You Win', lose: 'You Lose', draw: 'Draw' }
 export const SAID = { win: 'you win', lose: 'you lose', draw: 'draw' }
 export const announce = (mine, theirs, result, score) => `You picked ${mine}, the house picked ${theirs}: ${SAID[result]}. Score ${score}`
+// étape 2 : le choix annoncé pendant que la maison choisit (v1.0.4)
+export const announcePick = (mine) => `You picked ${mine}. The house is picking.`
 // D5, §3, §7
 export const KEYS = { version: 'rps/version', original: 'rps/score/original', bonus: 'rps/score/bonus' }
 export const LOGO = { original: 'Rock Paper Scissors', bonus: 'Rock Paper Scissors Lizard Spock' }
