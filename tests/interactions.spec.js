@@ -245,6 +245,39 @@ for (const width of [375, 1440]) {
   }
 }
 
+// A7 : la zone du jeu et la fenêtre des règles, focalisées par le script, montrent un contour au clavier ; à la souris, aucun
+const focusRing = (page) => page.evaluate(() => {
+  const el = document.activeElement
+  const s = getComputedStyle(el)
+  return { tag: el.localName, button: el.localName === 'button', inMain: !!el.closest('main'), outline: s.outlineStyle !== 'none' && parseFloat(s.outlineWidth) > 0 && s.outlineColor !== 'rgba(0, 0, 0, 0)' }
+})
+for (const width of [375, 1440]) {
+  test(`A7 — ${width} px : la zone du jeu et la fenêtre des règles, focalisées au clavier, ont un contour ; à la souris, non`, async ({ page }) => {
+    await open(page, width, 900, { clock: true, motion: 'reduce' })
+    await houseWill(page, 'original', 'Rock', 'Rock')
+    // clavier : Entrée sur Paper, puis Rules pendant la partie
+    await page.keyboard.press('Tab')
+    await page.keyboard.press('Enter')
+    await expectStep(page, 2, { mine: 'Paper' })
+    await expect.poll(() => focusRing(page)).toMatchObject({ button: false, inMain: true, outline: true })
+    await page.keyboard.press('Tab')
+    await expect(rulesButton(page)).toBeFocused()
+    await page.keyboard.press('Enter')
+    await expect(rules(page)).toBeFocused()
+    expect(await focusRing(page)).toMatchObject({ tag: 'dialog', outline: true })
+    await page.keyboard.press('Escape')
+    await page.clock.runFor(1500)
+    await playAgain(page).click()
+    // souris : un jeton, puis Rules
+    await token(page, 'Scissors').click()
+    await expectStep(page, 2, { mine: 'Scissors' })
+    await expect.poll(() => focusRing(page)).toMatchObject({ button: false, inMain: true, outline: false })
+    await rulesButton(page).click()
+    await expect(rules(page)).toBeFocused()
+    expect(await focusRing(page)).toMatchObject({ tag: 'dialog', outline: false })
+  })
+}
+
 test.describe('toucher', () => {
   test.use({ hasTouch: true })
   test('S1 — au doigt, 375 px : une partie gagnée, Play Again', async ({ page }) => {

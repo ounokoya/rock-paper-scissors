@@ -25,6 +25,7 @@
 - **Halos du gagnant** : trois disques blancs à 3 %, rayons 1,45, 1,92 et 2,44 fois celui du jeton.
 - **Bouton à filet** (Rules, choix de version) et **Play Again** : états de `composants.png`.
 - **Voile** des règles : noir à 50 %.
+- **Contour au clavier** de la zone du jeu et de la fenêtre des règles, focalisées par le script (v1.0.3, rapport IA R3) : blanc de 3 px autour (zone : 12 px ; boîte des règles : 4 px) ; page des règles mobile : Navy 900 à 8 px à l'intérieur ; planche `composants.png`, en bas à droite.
 
 ## Écrans et calage (rendu de la maquette Penpot contre maquette FM)
 

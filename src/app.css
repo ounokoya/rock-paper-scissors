@@ -62,10 +62,29 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  /* zone du jeu et dialogue focalisés par le script (§6) : ce ne sont pas des contrôles */
-  .duel:focus,
-  .rules:focus {
+  /* zone du jeu et fenêtre des règles focalisées par le script (§6, A7) : un contour au clavier, aucun à la souris */
+  .duel:focus:not(:focus-visible),
+  .rules:focus:not(:focus-visible) {
     outline: none;
+  }
+
+  .duel:focus-visible {
+    outline: 0.1875rem solid var(--color-white);
+    outline-offset: 0.75rem;
+    border-radius: 0.5rem;
+  }
+
+  /* page des règles (mobile) : contour Navy à l'intérieur de la page blanche ; boîte desktop : contour blanc autour */
+  .rules:focus-visible {
+    outline: 0.1875rem solid var(--color-navy);
+    outline-offset: -0.5rem;
+  }
+
+  @media (width >= 48rem) {
+    .rules:focus-visible {
+      outline-color: var(--color-white);
+      outline-offset: 0.25rem;
+    }
   }
 }
 
@@ -559,7 +578,8 @@
       container-type: normal;
       grid-template-columns: 18.1875rem 4.625rem 18.1875rem;
       justify-content: center;
-      inline-size: auto;
+      /* la grille a la largeur des jetons : son contour au clavier les entoure (A7) */
+      inline-size: fit-content;
       margin-block-start: --spacing(18.55);
     }
 
