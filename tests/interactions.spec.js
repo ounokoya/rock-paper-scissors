@@ -1,14 +1,24 @@
 import { test, expect } from '@playwright/test'
-import { open, outcome, announce, LOGO, TITLE, houseWill, stored, main, logo, token, playAgain, rulesButton, switchButton, rules, closeRules, status, expectScore, expectStep, focusWithin, settled, lum, pixel, count, ink, pageBox, WHITE } from './helpers.js'
+import { open, outcome, announce, LOGO, TITLE, houseWill, stored, main, logo, token, picked, housePicked, playAgain, rulesButton, switchButton, rules, closeRules, status, expectScore, expectStep, focusWithin, settled, lum, pixel, count, ink, WHITE } from './helpers.js'
 
 // Spec §6 et §8 — en tête, les parties menées au bout (S1 à la souris et au doigt, S2 au clavier seul, S3 règles, S4 versions),
 // à 375, 768 et 1440 px ; puis survols et focus (S14), mouvements (S15)
 
 const WIDTHS = { 375: 750, 768: 1024, 1440: 900 }
-// Étape 4 (§5) : centres des jetons et rayon ; à 1440, la mise en page de 1366 décalée de 37 px
-const STEP4 = { 375: { r: 64.5, mine: [94, 292], house: [282, 292] }, 768: { r: 145.5, mine: [201.5, 511], house: [566.5, 511] }, 1440: { r: 145.5, mine: [387, 511], house: [1032, 511] } }
+// Les mesures à l'écran partent de la boîte de chaque élément dans la page, jamais de coordonnées écrites en dur :
+// les positions elles-mêmes sont vérifiées par layout.spec.js.
+// Un jeton des étapes 2 à 4 : sa figure a la largeur du jeton, son icône est au centre (abaissée de 1,74 % du diamètre, §4)
+async function disc(figure) {
+  const f = await figure.boundingBox()
+  const icon = await figure.getByRole('img').boundingBox()
+  const r = f.width / 2
+  return { cx: f.x + r, cy: icon.y + icon.height / 2 - 0.0348 * r, r }
+}
 // Halos (D7) : un point à 1,3 rayon du centre de chaque jeton, vers le bord de la page
-const haloPoints = (w) => { const s = STEP4[w]; return { mine: [s.mine[0] - 1.3 * s.r, s.mine[1]], house: [s.house[0] + 1.3 * s.r, s.house[1]] } }
+async function haloPoints(page) {
+  const mine = await disc(picked(page)), house = await disc(housePicked(page))
+  return { mine: [mine.cx - 1.3 * mine.r, mine.cy], house: [house.cx + 1.3 * house.r, house.cy] }
+}
 // D2 : points d'une partie. Play Again ne remet pas le score à zéro : le score attendu se cumule d'une partie à l'autre
 const POINTS = { win: 1, lose: -1, draw: 0 }
 // trois parties de suite : victoire (0 → 1), défaite (1 → 0), égalité (0 → 0)
@@ -37,7 +47,7 @@ for (const [w, h] of Object.entries(WIDTHS)) {
       await expectScore(page, score)
       expect((await stored(page)).original).toBe(String(score))
       await settled(page)
-      const p = haloPoints(width)
+      const p = await haloPoints(page)
       light[result] = { mine: lum(await pixel(page, ...p.mine)), house: lum(await pixel(page, ...p.house)) }
       await playAgain(page).click()
       await expectStep(page, 1)
@@ -291,10 +301,9 @@ test.describe('toucher', () => {
   })
 })
 
-// S14 : survols et focus (§6), mesurés à l'écran, à 1366 × 768 (positions de la §5)
-const PAPER = { cx: 544, cy: 361, r: 99 }
-const RULES_BOX = { x: 1205, y: 695, width: 130, height: 42 }
-const SWITCH_BOX = { x: 1009, y: 695, width: 180, height: 42 }
+// S14 : survols et focus (§6), mesurés à l'écran autour de la boîte de chaque élément, à 1366 × 768
+const box = (locator) => locator.boundingBox()
+const circle = async (locator) => { const b = await box(locator); return { cx: b.x + b.width / 2, cy: b.y + b.width / 2, r: b.width / 2 } }
 const maxLum = async (page, xs, y) => Math.max(...await Promise.all(xs.map(async (x) => lum(await pixel(page, x, y)))))
 const range = (a, b) => Array.from({ length: b - a + 1 }, (_, i) => a + i)
 const pageSize = (page) => page.evaluate(() => [document.documentElement.scrollWidth, document.documentElement.scrollHeight])
@@ -303,7 +312,9 @@ test('S14 — survol d\'un jeton : disque blanc à 10 % autour, 11 % du diamètr
   await open(page, 1366, 768, { motion: 'reduce' })
   await page.mouse.move(1, 1)
   const size = await pageSize(page)
-  const inside = [PAPER.cx - PAPER.r - 10, PAPER.cy], outside = [PAPER.cx - PAPER.r - 28, PAPER.cy]
+  // anneau de survol : 11 % du diamètre au-delà de la face ; un point dedans, un point au-delà
+  const paper = await circle(token(page, 'Paper'))
+  const inside = [paper.cx - paper.r - 10, paper.cy], outside = [paper.cx - paper.r - paper.r * 2 * 0.111 - 6, paper.cy]
   const before = [lum(await pixel(page, ...inside)), lum(await pixel(page, ...outside))]
   await token(page, 'Paper').hover()
   expect(lum(await pixel(page, ...inside)) - before[0], 'halo de survol').toBeGreaterThan(10)
@@ -315,26 +326,29 @@ test('S14 — focus clavier d\'un jeton : contour blanc de 3 px décalé de 7 px
   await open(page, 1366, 768, { motion: 'reduce' })
   await expect(token(page, 'Paper')).toBeVisible()
   await page.mouse.move(1, 1)
-  const ring = range(PAPER.cx - PAPER.r - 11, PAPER.cx - PAPER.r - 5)
-  expect(await maxLum(page, ring, PAPER.cy), 'sans focus').toBeLessThan(120)
+  // contour de 3 px décalé de 7 px : de 7 à 10 px à gauche de la face
+  const paper = await circle(token(page, 'Paper'))
+  const ring = range(Math.floor(paper.cx - paper.r) - 11, Math.floor(paper.cx - paper.r) - 5)
+  expect(await maxLum(page, ring, paper.cy), 'sans focus').toBeLessThan(120)
   await page.keyboard.press('Tab')
   await expect(token(page, 'Paper')).toBeFocused()
-  expect(await maxLum(page, ring, PAPER.cy), 'contour de focus').toBeGreaterThan(200)
+  expect(await maxLum(page, ring, paper.cy), 'contour de focus').toBeGreaterThan(200)
 })
 
-for (const [name, box, locate] of [['Rules', RULES_BOX, rulesButton], ['choix de version', SWITCH_BOX, (page) => switchButton(page, 'original')]]) {
+for (const [name, locate] of [['Rules', rulesButton], ['choix de version', (page) => switchButton(page, 'original')]]) {
   test(`S14 — ${name} : survol = fond blanc à 10 %, focus = contour blanc décalé de 2 px ; taille de la page inchangée`, async ({ page }) => {
     await open(page, 1366, 768, { motion: 'reduce' })
     await page.mouse.move(1, 1)
     const size = await pageSize(page)
-    const inside = [box.x + 8, box.y + 8]
+    const b = await box(locate(page))
+    // un point dans le bouton, hors du texte et du filet
+    const inside = [b.x + 8, b.y + 8]
     const before = lum(await pixel(page, ...inside))
     await locate(page).hover()
     expect(lum(await pixel(page, ...inside)) - before, 'fond de survol').toBeGreaterThan(10)
     expect(await pageSize(page)).toEqual(size)
     await page.mouse.move(1, 1)
     // contour de 3 px décalé de 2 px : de 5 à 3 px à gauche du bouton (son filet n'en fait pas partie)
-    const b = await pageBox(locate(page))
     const ring = range(Math.floor(b.x) - 5, Math.floor(b.x) - 3)
     expect(await maxLum(page, ring, b.y + b.height / 2), 'sans focus').toBeLessThan(120)
     await locate(page).focus()
@@ -347,18 +361,17 @@ for (const [name, box, locate] of [['Rules', RULES_BOX, rulesButton], ['choix de
 
 test('S14 — Play Again : texte Red 800 au survol, navy au repos ; contour blanc au focus clavier', async ({ page }) => {
   await open(page, 1366, 768, { motion: 'reduce' })
-  const box = { x: 573, y: 513, width: 220, height: 48 }
   const red = (c) => c[0] - c[2] > 60 && c[0] > 100
   await houseWill(page, 'original', 'Rock', 'Rock')
   await token(page, 'Paper').click()
   await expectStep(page, 4, { mine: 'Paper', theirs: 'Rock' })
   await page.mouse.move(1, 1)
-  expect(await count(page, box, red), 'texte navy au repos').toBe(0)
-  expect(await ink(page, box, WHITE), 'bouton blanc').not.toBeNull()
+  const b = await box(playAgain(page))
+  expect(await count(page, b, red), 'texte navy au repos').toBe(0)
+  expect(await ink(page, b, WHITE), 'bouton blanc').not.toBeNull()
   await playAgain(page).hover()
-  expect(await count(page, box, red), 'texte rouge au survol').toBeGreaterThan(30)
+  expect(await count(page, b, red), 'texte rouge au survol').toBeGreaterThan(30)
   await page.mouse.move(1, 1)
-  const b = await pageBox(playAgain(page))
   const ring = range(Math.floor(b.x) - 5, Math.floor(b.x) - 3)
   expect(await maxLum(page, ring, b.y + b.height / 2), 'sans contour après un clic').toBeLessThan(120)
   // au clavier : le focus arrive sur Play Again avec son contour
@@ -373,8 +386,9 @@ test('S14 — croix des règles : Navy 900 ; contour Navy au focus clavier', asy
   await open(page, 1366, 768, { motion: 'reduce' })
   await rulesButton(page).click()
   await expect(rules(page)).toBeVisible()
-  const icon = { x: 832, y: 215, width: 19, height: 19 }
-  const around = { x: icon.x - 12, y: icon.y - 12, width: icon.width + 24, height: icon.height + 24 }
+  // la croix et son contour (décalé de 2 px, 3 px d'épaisseur) : la boîte du bouton élargie de 8 px
+  const b = await box(closeRules(page))
+  const around = { x: b.x - 8, y: b.y - 8, width: b.width + 16, height: b.height + 16 }
   const navy = (c) => lum(c) < 120 && c[2] > c[0]
   const quiet = await count(page, around, navy)
   expect(quiet, 'croix Navy').toBeGreaterThan(20)
