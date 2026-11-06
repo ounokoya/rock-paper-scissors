@@ -68,3 +68,5 @@ Mesures des tests corrigées (le test se trompait, pas le jeu) : axe-core attend
 
 v1.0.1 en ligne : **217 / 217** en un passage ; S3 répété cinq fois : 10 échecs sur 15, à la réouverture des règles (Échap puis Entrée) : l'état « règles ouvertes » ne repassait à faux qu'avec l'événement `close`, qui arrive dans une tâche suivante ; Entrée tombait entre les deux, et la fenêtre ne se rouvrait pas. Test ajouté, rouge avant le correctif (croix puis Rules dans la même tâche) ; la croix, Échap et le voile ferment tout de suite, chaque ouverture crée une fenêtre neuve, l'événement tardif d'une fenêtre déjà fermée est ignoré. v1.0.2 : 218 tests Playwright et 7 unitaires verts en local.
 
+v1.0.2 en ligne : **218 / 218** en un passage (202 s) ; S3 répété cinq fois : **25 / 25**. Fichier des interactions répété trois fois, trois fois de suite : 71 / 93 au premier passage (22 échecs, en 3,4 min au lieu de 1,5 ; détail non gardé, cause non vérifiée : le site a pu répondre lentement à ce moment-là), puis **93 / 93** et **93 / 93**.
+
