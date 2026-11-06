@@ -2,6 +2,13 @@
 
 Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) · Versions : [SemVer](https://semver.org/lang/fr/).
 
+## [1.0.5] — 2026-11-06
+
+Dernière tentative sur la seule piste du rapport regénéré (« keeping visual assertions resilient while retaining meaningful design verification »).
+
+### Changed
+- Les 22 comparaisons visuelles mesurent l'écart sur tout l'écran et sur chaque zone (en-tête, jeu, bas de page ; règles : la fenêtre et la page derrière), tirée de la boîte des éléments ; 5 % au plus partout ; le choix de version, absent des maquettes, n'est pas compté (S19, G3-6). La boîte du score masquée laisse l'écran à 2,6 %, mais l'en-tête à 6,7 % : le défaut est maintenant rouge.
+
 ## [1.0.4] — 2026-11-06
 
 Après le rapport regénéré sur la v1.0.3 (9,4 ; Testing 8,2, Accessibility 8,7 ; `specs/analyse/2026-11-06-rapport-ia.md`), un commit par changement.

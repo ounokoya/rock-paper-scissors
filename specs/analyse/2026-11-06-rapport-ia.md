@@ -82,3 +82,7 @@ Notes **identiques** à celles de la v1.0.3 : global 9,4 ; Best Practices 9,7 ·
 
 Lecture : comme pour File Organization et Architecture au rapport précédent (M60), les parties n'ont pas été réévaluées malgré les changements (T1 réécrit les mesures d'`interactions.spec.js`, A1 ajoute trois éléments d'accessibilité). Le guide FM « Solution Reports Overview » ne dit pas ce que la regénération réévalue.
 
+### Dernière tentative (v1.0.5, accord de Koya : « Dernière tentative »)
+
+`test: compare chaque écran aux maquettes zone par zone, choix de version exclu` : 5 % au plus sur l'écran et sur chaque zone (au plus haut 3,66 %, en-tête mobile) ; essai jetable : la boîte du score masquée donne 2,60 % sur l'écran (passerait) et 6,70 % sur l'en-tête (échoue). 225 tests Playwright et 7 unitaires verts en local.
+
