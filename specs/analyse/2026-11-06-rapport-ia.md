@@ -86,3 +86,13 @@ Lecture : comme pour File Organization et Architecture au rapport précédent (M
 
 `test: compare chaque écran aux maquettes zone par zone, choix de version exclu` : 5 % au plus sur l'écran et sur chaque zone (au plus haut 3,66 %, en-tête mobile) ; essai jetable : la boîte du score masquée donne 2,60 % sur l'écran (passerait) et 6,70 % sur l'en-tête (échoue). 225 tests Playwright et 7 unitaires verts en local.
 
+## Rapport regénéré sur v1.0.5 (2026-11-06, accord de Koya : « Oui, publie et regénère », 1 crédit)
+
+v1.0.5 poussée (`main`, tag `v1.0.5`) et publiée (`gh-pages` ; code du site identique à v1.0.4) ; suite rejouée en ligne : **225 / 225**.
+
+Notes inchangées : global 9,4 ; Testing **8,2** ; Accessibility **8,7** ; le reste identique. Accessibility : mêmes trois constats positifs. Testing : un **troisième constat**, nouveau et précis :
+
+| # | Partie | Constat | Verdict | Proposition |
+|---|---|---|---|---|
+| T2 | Testing | `interactions.spec.js:41` : après un choix, les tests avancent l'horloge sans jamais tenter un second choix ni « Play Again » pendant les étapes 2 et 3 ; une régression qui permettrait un double choix ou un redémarrage prématuré passerait | **Juste** : `pick()` ignore un choix hors de l'étape 1 et les jetons disparaissent, mais aucun test ne le tente | En tête des interactions : pendant les étapes 2 et 3, ni jeton ni Play Again ; Entrée et Espace sur la zone du jeu, un clic là où étaient les jetons : aucun effet (même étape, même signe de la maison, aucun tirage de plus, score inchangé) ; à la souris et au clavier |
+
