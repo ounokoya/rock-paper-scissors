@@ -2,6 +2,13 @@
 
 Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) · Versions : [SemVer](https://semver.org/lang/fr/).
 
+## [1.0.6] — 2026-11-06
+
+Après le rapport regénéré sur la v1.0.5 (9,4 ; nouveau constat T2 en Testing ; `specs/analyse/2026-11-06-rapport-ia.md`).
+
+### Added
+- S1 et S2 tentent un second choix et Play Again pendant le déroulé (étapes 2 et 3), à la souris et au clavier : aucun effet, un seul tirage par partie (tirage témoin resté en file). Deux régressions essayées puis retirées sont attrapées (T2).
+
 ## [1.0.5] — 2026-11-06
 
 Dernière tentative sur la seule piste du rapport regénéré (« keeping visual assertions resilient while retaining meaningful design verification »).

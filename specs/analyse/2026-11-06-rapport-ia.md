@@ -96,3 +96,7 @@ Notes inchangées : global 9,4 ; Testing **8,2** ; Accessibility **8,7** ; le re
 |---|---|---|---|---|
 | T2 | Testing | `interactions.spec.js:41` : après un choix, les tests avancent l'horloge sans jamais tenter un second choix ni « Play Again » pendant les étapes 2 et 3 ; une régression qui permettrait un double choix ou un redémarrage prématuré passerait | **Juste** : `pick()` ignore un choix hors de l'étape 1 et les jetons disparaissent, mais aucun test ne le tente | En tête des interactions : pendant les étapes 2 et 3, ni jeton ni Play Again ; Entrée et Espace sur la zone du jeu, un clic là où étaient les jetons : aucun effet (même étape, même signe de la maison, aucun tirage de plus, score inchangé) ; à la souris et au clavier |
 
+### Correction (v1.0.6, accord de Koya : « Traite T2 »)
+
+`test: tente un second choix et Play Again pendant le déroulé d'une partie` : tests de garde (le jeu bloquait déjà ces tentatives) ; preuve qu'ils peuvent échouer : Play Again affiché pendant le déroulé (S1 et S2 rouges), Entrée sur la zone qui relance la partie (S2 rouge), deux régressions essayées puis retirées. 225 tests Playwright et 7 unitaires verts en local.
+
