@@ -142,14 +142,30 @@ export const inkOf = async (page, locator, test, m = 4) => { const b = await pag
 export const noHorizontalScroll = (page) => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)
 export const overlap = (a, b) => a.x < b.x + b.width && b.x < a.x + a.width && a.y < b.y + b.height && b.y < a.y + a.height
 
-// Part des pixels dont un canal diffère de plus de 40 (mesure du SDL-FM), contre une maquette JPG décodée par le navigateur
-export async function diffRatio(page, screenshot, jpg) {
-  return page.evaluate(async ([a, b]) => {
+// Part des pixels dont un canal diffère de plus de 40 (mesure du SDL-FM), contre une maquette JPG décodée par le navigateur :
+// sur tout l'écran et par zone ({ nom: { x, y, width, height, minus } }), hors des rectangles exclus (ce que la maquette ne dessine pas)
+export async function compare(page, screenshot, jpg, { exclude = [], zones = {} } = {}) {
+  return page.evaluate(async ([a, b, exclude, zones]) => {
     const load = async (src) => { const im = new Image(); im.src = src; await im.decode(); const c = document.createElement('canvas'); c.width = im.width; c.height = im.height; const g = c.getContext('2d'); g.drawImage(im, 0, 0); return { w: c.width, h: c.height, d: g.getImageData(0, 0, c.width, c.height).data } }
     const A = await load(a), B = await load(b)
     if (A.w !== B.w || A.h !== B.h) throw new Error(`capture ${A.w}×${A.h} ≠ maquette ${B.w}×${B.h}`)
-    let n = 0
-    for (let i = 0; i < A.d.length; i += 4) if (Math.max(Math.abs(A.d[i] - B.d[i]), Math.abs(A.d[i + 1] - B.d[i + 1]), Math.abs(A.d[i + 2] - B.d[i + 2])) > 40) n++
-    return n / (A.w * A.h)
-  }, [`data:image/png;base64,${screenshot.toString('base64')}`, `data:image/jpeg;base64,${jpg.toString('base64')}`])
+    const inside = (r, x, y) => x >= r.x && x < r.x + r.width && y >= r.y && y < r.y + r.height
+    const names = Object.keys(zones)
+    const seen = Object.fromEntries(names.map((n) => [n, 0])), off = Object.fromEntries(names.map((n) => [n, 0]))
+    let total = 0, counted = 0
+    for (let y = 0; y < A.h; y++) for (let x = 0; x < A.w; x++) {
+      if (exclude.some((r) => inside(r, x, y))) continue
+      const i = (y * A.w + x) * 4
+      const differs = Math.max(Math.abs(A.d[i] - B.d[i]), Math.abs(A.d[i + 1] - B.d[i + 1]), Math.abs(A.d[i + 2] - B.d[i + 2])) > 40
+      counted++
+      if (differs) total++
+      for (const n of names) {
+        const z = zones[n]
+        if (!inside(z, x, y) || (z.minus ?? []).some((r) => inside(r, x, y))) continue
+        seen[n]++
+        if (differs) off[n]++
+      }
+    }
+    return { total: total / counted, zones: Object.fromEntries(names.filter((n) => seen[n]).map((n) => [n, off[n] / seen[n]])) }
+  }, [`data:image/png;base64,${screenshot.toString('base64')}`, `data:image/jpeg;base64,${jpg.toString('base64')}`, exclude, zones])
 }

@@ -189,8 +189,8 @@ S16 Given chaque étape, les règles, chaque version, à 375, 768 et 1440   Then
 S17 Given le HTML servi et chaque vue rendue   Then validateur W3C Nu et html-validate (réglage FM) sans erreur ; eslint sans erreur ; gardes des règles FM (rem, aria-label, CSS logique)
 S18 Given chaque version   Then titre de la page, langue en, un seul h1
 
-Visuel (G3-6 : 5 % par écran, contre les JPG du starter de specs/reference/)
-S19 Given les 22 écrans des maquettes FM, rejoués avec un score gardé de 12 et la maison fixée sur les signes de chaque maquette (§9), le pointeur sur Play Again pour desktop-etape-4-perdu   Then le contenu de l'écran est là (titre, jetons, résultat ou dialogue), puis la capture vs la maquette ≤ 5,0 %
+Visuel (G3-6 : 5 % par écran et, depuis v1.0.5, 5 % par zone — en-tête, jeu, bas de page ; règles : la fenêtre et la page derrière — contre les JPG du starter de specs/reference/ ; le choix de version, absent des maquettes, n'est pas compté)
+S19 Given les 22 écrans des maquettes FM, rejoués avec un score gardé de 12 et la maison fixée sur les signes de chaque maquette (§9), le pointeur sur Play Again pour desktop-etape-4-perdu   Then le contenu de l'écran est là (titre, jetons, résultat ou dialogue), puis la capture vs la maquette ≤ 5,0 % sur l'écran entier et sur chaque zone
 ```
 
 Règles sans navigateur (`node --test tests/unit/`)

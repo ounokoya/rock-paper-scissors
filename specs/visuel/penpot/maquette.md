@@ -52,5 +52,5 @@ Le bouton de choix de version, absent des maquettes FM, compte pour 0,5 à 1 poi
 | G3-3 | Règles AA (Q-A1, Q-A2) | Croix Navy 900 à 100 % ; « BEATS » et flèches `#6B7087` ; les anneaux du schéma restent `#B1B4C5` (décoratifs) |
 | G3-4 | Tablette (Q-L1) | De 768 à 1023 px : grille desktop, résultat et Play Again sous les deux jetons à l'étape 4 ; Rules en bas à droite |
 | G3-5 | Typographies | Tailles corrigées ci-dessus (boutons 16 px, libellé du score 14 px, titre des règles 32 px) |
-| G3-6 | Seuil visuel | 5 % par écran pour le code contre les maquettes FM (la maquette Penpot est à 0,56–2,96 %) |
+| G3-6 | Seuil visuel | 5 % par écran pour le code contre les maquettes FM (la maquette Penpot est à 0,56–2,96 %) ; depuis v1.0.5, 5 % aussi par zone (en-tête, jeu, bas de page ; règles : fenêtre, page derrière), le choix de version exclu |
 | G3-7 | Égalité (Q-B3) | Même mise en page que le résultat : « DRAW », pas de halo, score inchangé (pas dessinée : elle reprend l'étape 4) |

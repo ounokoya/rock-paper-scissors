@@ -94,7 +94,7 @@ The tests replace `Math.random` in the page to choose the house's sign, and driv
 | See the designs' positions at 1366, 768 and 375 px (within 2 px), the rules centred on desktop and as a full page on mobile, the rules usable in a short window, and no horizontal scroll from 320 px | S5–S8 | [`layout.spec.js`](./tests/layout.spec.js) |
 | axe-core at every step, in both versions and three sizes; landmarks, one `h1`, the rules as text | S16, S18, A1–A4, A10 | [`accessibility.spec.js`](./tests/accessibility.spec.js) |
 | W3C Nu, html-validate and ESLint with Frontend Mentor's settings | S17 | [`static.spec.js`](./tests/static.spec.js) |
-| The 22 designs replayed (same signs, same score) and compared with the JPG files: 0.6–3.1 % of pixels differ | S19 | [`visual.spec.js`](./tests/visual.spec.js) |
+| The 22 designs replayed (same signs, same score) and compared with the JPG files on the whole screen and zone by zone (header, game, bottom; the rules dialog and the page behind), the version switch, absent from the designs, left out: 0.5–3.1 % per screen, 3.7 % at most per zone | S19 | [`visual.spec.js`](./tests/visual.spec.js) |
 | Rules without a browser: every pair, the house's pick, the next score, saved values; the rules return names, never colours | U1–U5 | [`rules.test.js`](./tests/unit/rules.test.js) |
 | Architecture rules: pure rules, colours only in the tokens, nothing loaded from other domains, three storage keys, no editable design file | ADR-0003–0011 | [`fitness.spec.js`](./tests/fitness.spec.js) |
 
@@ -124,6 +124,8 @@ Every part of a token (edge, disc, icon, hover ring, halos) is a fraction of `--
 **A `<dialog>` that stretched.** A modal dialog is pinned to the top and bottom of the screen; with `block-size: auto` it filled the whole height. `fit-content` keeps it at the size of its content, and `max-block-size` lets it scroll in a short window. A test now opens the rules at 1366 × 400.
 
 **An SVG without a `viewBox` does not scale.** The Lizard-Spock rules diagram is 340 px wide, wider than a phone's page; without a `viewBox`, the smaller SVG was cut instead of shrinking.
+
+**Visual checks that point at the problem.** One percentage per screen can hide a local defect: with the score box hidden, the desktop screen still differed from the design by only 2.6 %, under the 5 % threshold. The visual tests now also compare each zone — header, game, bottom of the page, or the rules dialog and the page behind it — and the header alone reached 6.7 %. The zones come from each element's box, and the version switch, which the designs do not show, is left out of the count.
 
 **Focus at the right moment.** Focus moves to Play Again when the result appears, unless the rules are open. The effect also ran again when the rules closed, and took the focus away from the Rules button; reading the dialog's state with `untrack` keeps the effect tied to the result only.
 
