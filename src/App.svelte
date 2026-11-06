@@ -44,7 +44,7 @@
       {#if game.step === 1}
         <button type="button" class="outline-button outline-button-wide" aria-label="Switch to {other}" onclick={switchVersion}>{other}</button>
       {/if}
-      <button type="button" class="outline-button" bind:this={rulesButton} onclick={() => { rulesKey += 1; rulesOpen = true }}>Rules</button>
+      <button type="button" class="outline-button" aria-haspopup="dialog" bind:this={rulesButton} onclick={() => { rulesKey += 1; rulesOpen = true }}>Rules</button>
     </div>
     <p class="sr-only" role="status">{notice.text}</p>
     {#if rulesOpen}

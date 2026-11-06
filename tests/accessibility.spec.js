@@ -41,6 +41,13 @@ for (const [name, go] of Object.entries(VIEWS)) {
   })
 }
 
+test('A5 — « Rules » annonce qu\'il ouvre un dialogue, et l\'ouvre', async ({ page }) => {
+  await open(page, 1440, 900)
+  await expect(rulesButton(page)).toHaveAttribute('aria-haspopup', 'dialog')
+  await rulesButton(page).click()
+  await expect(rules(page)).toBeVisible()
+})
+
 for (const version of ['original', 'bonus']) {
   test(`S18, A1 — ${version} : titre de la page, langue en, un seul h1 (le logo), h2 du résultat`, async ({ page }) => {
     await open(page, 1440, 900, { version, clock: true })

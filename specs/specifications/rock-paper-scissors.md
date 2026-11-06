@@ -156,7 +156,7 @@ Animations : à l'étape 3, le jeton de la maison apparaît en grandissant (300 
 | Étapes 2 à 4 | figure | « You Picked » : img du signe (« Paper »…) ; « The House Picked » : à l'étape 2 aucune image, ensuite img du signe |
 | Étape 4 | heading (2) · button | « You Win », « You Lose » ou « Draw » · « Play Again » |
 | Annonces | status | « You picked Paper, the house picked Rock: you win. Score 13 » (« you lose », « draw ») ; « Lizard-Spock. Score 3 » ou « Original. Score 12 » |
-| Bas de page | button | « Rules » ; à l'étape 1 « Switch to Lizard-Spock » ou « Switch to Original » |
+| Bas de page | button | « Rules » (`aria-haspopup` « dialog », v1.0.4) ; à l'étape 1 « Switch to Lizard-Spock » ou « Switch to Original » |
 | Règles | dialog | « Rules » ; button « Close rules » ; list : une ligne par règle de D1 (« Paper beats Rock »…), 3 ou 10 |
 
 ## 8. Critères d'acceptation
