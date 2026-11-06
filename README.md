@@ -46,6 +46,7 @@ Users should be able to:
 
 ### Links
 
+- Solution URL: [frontendmentor.io/solutions/rock-paper-scissors-lizard-spock-svelte-5-tailwind-v4-playwright-XZIdVxKJa5](https://www.frontendmentor.io/solutions/rock-paper-scissors-lizard-spock-svelte-5-tailwind-v4-playwright-XZIdVxKJa5)
 - Live Site URL: [ounokoya.github.io/rock-paper-scissors](https://ounokoya.github.io/rock-paper-scissors/)
 - Repository: [github.com/ounokoya/rock-paper-scissors](https://github.com/ounokoya/rock-paper-scissors)
 
