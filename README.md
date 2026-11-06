@@ -58,6 +58,7 @@ Users should be able to:
 - [Svelte 5](https://svelte.dev/) with runes, as a single page built with [Vite](https://vite.dev/) (no SvelteKit)
 - [Tailwind CSS v4](https://tailwindcss.com/) — tokens from the style guide and the Penpot mockup in `@theme`, default palette removed; hand-written components with logical properties and lengths from `--spacing()`
 - The game rules as pure functions (`src/lib/rules.js`): signs, who beats whom, the house's pick from a random number, the next score, reading saved values
+- Starter images in `images/`; the rules diagrams and the close icon in `src/assets/`, as AA-corrected copies of the starter's files (darker "BEATS" labels and arrows, opaque close icon, a `viewBox` to scale), inlined in the page
 - Boards with fixed proportions: tokens placed in container query units (`cqi`), so the triangle and the pentagon shrink as one below 375 px
 - Barlow Semi Condensed served with the site through [Fontsource](https://fontsource.org/fonts/barlow-semi-condensed)
 - [Playwright](https://playwright.dev/), [axe-core](https://github.com/dequelabs/axe-core), the W3C Nu validator, html-validate and ESLint for tests

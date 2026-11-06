@@ -55,6 +55,12 @@ test('ADR-0007 — la page n\'écrit que les trois clés de D5', async ({ page }
   expect(keys.every((k) => Object.values(KEYS).includes(k))).toBe(true)
 })
 
+test('ADR-0008 — les SVG corrigés AA de src/assets/ n\'ont pas d\'original en double dans images/', () => {
+  const corrected = readdirSync(root('src/assets')).filter((f) => f.endsWith('.svg'))
+  expect(corrected.length).toBeGreaterThan(0)
+  expect(corrected.filter((f) => existsSync(root(`images/${f}`)))).toEqual([])
+})
+
 test('ADR-0010 — aucun fichier de maquette éditable suivi par git', () => {
   const tracked = execFileSync('git', ['ls-files'], { cwd: root(''), encoding: 'utf8' }).split('\n')
   expect(tracked.length).toBeGreaterThan(10)

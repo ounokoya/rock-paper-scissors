@@ -49,4 +49,4 @@ Dégradé radial de hsl(214, 47%, 23%) (`#1f3756`) à hsl(237, 48%, 15%) (`#1416
 
 ## Images du starter
 
-`images/` : `logo.svg` et `logo-bonus.svg` (titres des deux versions), `icon-rock.svg`, `icon-paper.svg`, `icon-scissors.svg`, `icon-lizard.svg`, `icon-spock.svg`, `bg-triangle.svg` et `bg-pentagon.svg` (liens entre les signes), `image-rules.svg` et `image-rules-bonus.svg` (schémas des règles), `icon-close.svg`, `favicon-32x32.png`.
+`images/` : `logo.svg` et `logo-bonus.svg` (titres des deux versions), `icon-rock.svg`, `icon-paper.svg`, `icon-scissors.svg`, `icon-lizard.svg`, `icon-spock.svg`, `bg-triangle.svg` et `bg-pentagon.svg` (liens entre les signes), `image-rules.svg` et `image-rules-bonus.svg` (schémas des règles), `icon-close.svg`, `favicon-32x32.png`. Depuis v1.0.3, ces trois derniers SVG ne sont plus dans `images/` : seules leurs copies corrigées AA, dans `src/assets/`, servent (ADR-0008).

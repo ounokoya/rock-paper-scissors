@@ -13,9 +13,10 @@ La fenêtre des règles doit prendre le focus, le garder, se fermer par Échap, 
 | `<img>` des SVG du starter | Rien à copier | Couleurs sous AA ; une image SVG ne voit pas les polices de la page |
 
 ## Décision
-- Copies corrigées dans `src/assets/` : `#B1B4C5` → `#6B7087` sur les textes et les flèches seulement (les anneaux restent `#B1B4C5`, décoratifs) ; croix Navy 900 sans opacité.
+- Copies corrigées dans `src/assets/` : `#B1B4C5` → `#6B7087` sur les textes et les flèches seulement (les anneaux restent `#B1B4C5`, décoratifs) ; croix Navy 900 sans opacité ; `viewBox` ajouté pour la mise à l'échelle. Les originaux du starter (`icon-close.svg`, `image-rules.svg`, `image-rules-bonus.svg`) sont retirés d'`images/` (v1.0.3, rapport IA R4) : une seule version de chaque fichier ; l'original reste dans l'historique git et le starter de FM.
 - Schéma intégré, `aria-hidden`, son texte en Barlow Semi Condensed 700 par le CSS ; les règles de D1 en liste, masquée à l'écran et lue par les lecteurs d'écran.
 - Tab reste dans le dialogue ; voile par `::backdrop` (≥ 768 px), page blanche entière en dessous ; à la fermeture, focus sur « Rules ».
 
 ## Conséquences
 - Vérifié par S3, S7, S14, S16, A4, A5.
+- Fitness function : aucun SVG de `src/assets/` n'a d'original en double dans `images/`.
