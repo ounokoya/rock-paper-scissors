@@ -38,3 +38,8 @@ npm-debug.log*
 *.pem
 .DS_Store
 Thumbs.db
+
+# Ajouté à l'import (SDL-FM 1.7.0) : build, rapports de tests
+/test-results
+/playwright-report
+__pycache__/
