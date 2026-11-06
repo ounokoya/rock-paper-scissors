@@ -13,7 +13,7 @@ Un jeu en quatre étapes, deux versions, un score par version, une fenêtre des 
 | HTML + JavaScript sans cadriciel | Aucune dépendance | Mise à jour du DOM à écrire pour chaque étape |
 
 ## Décision
-- Svelte 5 (runes), Vite, Tailwind CSS v4 ; un état central dans `src/lib/game.svelte.js` ; règles pures dans `src/lib/rules.js` (`SIGNS`, `RULES`, `beats`, `outcome`, `housePick`, `nextScore`, `readScore`, `readVersion`).
+- Svelte 5 (runes), Vite, Tailwind CSS v4 ; un état central dans `src/lib/game.svelte.js`, le stockage dans `src/lib/storage.js` ; règles pures dans `src/lib/rules.js` (`SIGNS`, `RULES`, `beats`, `outcome`, `housePick`, `nextScore`, `readScore`, `readVersion`).
 - Build statique publié sous `/rock-paper-scissors/` (ADR-0011).
 
 ## Conséquences

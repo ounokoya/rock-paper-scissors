@@ -42,6 +42,11 @@ test('ADR-0005 — rien n\'est chargé hors du domaine ; Barlow Semi Condensed 6
   expect(Object.keys(pkg.dependencies ?? {})).toEqual(['@fontsource/barlow-semi-condensed'])
 })
 
+test('ADR-0007 — seul src/lib/storage.js touche au stockage du navigateur', () => {
+  const users = files(root('src')).filter((f) => /\.(svelte|js)$/.test(f) && /\blocalStorage\b/.test(code(readFileSync(f, 'utf8'))))
+  expect(users.map((f) => f.split('/src/')[1])).toEqual(['lib/storage.js'])
+})
+
 test('ADR-0007 — la page n\'écrit que les trois clés de D5', async ({ page }) => {
   await open(page, 1440, 900, { clock: true })
   await houseWill(page, 'original', 'Rock')
