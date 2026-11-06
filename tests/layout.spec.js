@@ -149,6 +149,41 @@ for (const [name, r] of Object.entries(RULES)) {
   })
 }
 
+// S7 : règles dans des fenêtres basses (zone qui défile, M45) : rien ne se chevauche, la fenêtre tient dans l'écran et défile
+for (const version of ['original', 'bonus']) {
+  for (const [w, h] of [[375, 600], [375, 480]]) {
+    test(`S7 — règles, ${w} × ${h}, ${version} : titre, schéma et croix sans se chevaucher ; la croix se clique`, async ({ page }) => {
+      await open(page, w, h, { version, motion: 'reduce' })
+      await page.mouse.move(1, 1)
+      await rulesButton(page).click()
+      await expect(rules(page)).toBeVisible()
+      await page.mouse.move(1, 1)
+      const title = await rules(page).getByRole('heading', { level: 2, name: 'Rules' }).boundingBox()
+      const top = Math.ceil(title.y + title.height) + 1
+      const upper = await ink(page, { x: 6, y: top, width: w - 12, height: h - top - 1 }, NOT_WHITE)
+      expect(upper.y - (title.y + title.height), 'écart sous le titre').toBeGreaterThanOrEqual(8)
+      await closeRules(page).scrollIntoViewIfNeeded()
+      const close = await closeRules(page).boundingBox()
+      const lower = await ink(page, { x: 6, y: 1, width: w - 12, height: Math.floor(close.y) - 2 }, NOT_WHITE)
+      expect(close.y - (lower.y + lower.height), 'écart au-dessus de la croix').toBeGreaterThanOrEqual(8)
+      await closeRules(page).click()
+      await expect(rules(page)).toBeHidden()
+    })
+  }
+  test(`S7 — règles, 1366 × 400, ${version} : la fenêtre tient dans l'écran et défile ; la croix se clique`, async ({ page }) => {
+    await open(page, 1366, 400, { version, motion: 'reduce' })
+    await rulesButton(page).click()
+    await expect(rules(page)).toBeVisible()
+    // la fenêtre est fixe : sa boîte à l'écran, la page ayant défilé jusqu'au bouton Rules
+    const box = await rules(page).boundingBox()
+    expect(box.y, 'haut de la fenêtre').toBeGreaterThanOrEqual(0)
+    expect(box.y + box.height, 'bas de la fenêtre').toBeLessThanOrEqual(400)
+    expect(await rules(page).evaluate((d) => d.scrollHeight > d.clientHeight && getComputedStyle(d).overflowY !== 'hidden'), 'la fenêtre défile').toBe(true)
+    await closeRules(page).click()
+    await expect(rules(page)).toBeHidden()
+  })
+}
+
 // S8 : pas de défilement horizontal ; boutons du bas jamais sur le jeu
 const VIEWS = {
   'étape 1': async () => {},

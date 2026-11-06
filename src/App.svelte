@@ -1,11 +1,12 @@
 <script>
+  import { onMount } from 'svelte'
   import Header from './components/Header.svelte'
   import Picker from './components/Picker.svelte'
   import Duel from './components/Duel.svelte'
   import Rules from './components/Rules.svelte'
   import { game, switchVersion } from './lib/game.svelte.js'
   import { notice } from './lib/announce.svelte.js'
-  import { VERSIONS } from './lib/signs.js'
+  import { VERSIONS, ICONS } from './lib/signs.js'
 
   let rulesOpen = $state(false)
   let rulesButton
@@ -13,6 +14,11 @@
   const other = $derived(VERSIONS[game.version === 'original' ? 'bonus' : 'original'].name)
 
   $effect(() => { document.title = VERSIONS[game.version].title })
+
+  // images montrées plus tard (l'autre version, ses icônes) : chargées d'avance, pour qu'aucune ne manque à son premier affichage
+  onMount(() => {
+    for (const src of [...Object.values(VERSIONS).flatMap((v) => [v.logo, v.links]), ...Object.values(ICONS)]) new Image().src = src
+  })
 
   function closeRules() {
     rulesOpen = false

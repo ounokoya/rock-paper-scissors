@@ -159,6 +159,54 @@ for (const [w, h] of Object.entries(WIDTHS)) {
   })
 }
 
+// A7 : Tab de bout en bout, jamais un nombre fixe de tabulations ; chaque arrêt a son contour de focus
+async function tabRound(page) {
+  const stops = []
+  for (let i = 0; i < 20; i++) {
+    const stop = await page.evaluate(() => {
+      const el = document.activeElement
+      if (!el || el === document.body) return null
+      const s = getComputedStyle(el)
+      return { name: el.getAttribute('aria-label') || el.querySelector('img')?.alt || el.textContent.trim(), outline: s.outlineStyle !== 'none' && parseFloat(s.outlineWidth) > 0 }
+    })
+    if (!stop || (stops.length && stop.name === stops[0].name)) break
+    stops.push(stop)
+    await page.keyboard.press('Tab')
+  }
+  return stops
+}
+const ROUNDS = {
+  'étape 1, Original': ['Paper', 'Scissors', 'Rock', 'Switch to Lizard-Spock', 'Rules'],
+  'étape 1, Lizard-Spock': ['Scissors', 'Paper', 'Rock', 'Lizard', 'Spock', 'Switch to Original', 'Rules'],
+  'étape 4': ['Play Again', 'Rules'],
+  'règles': ['Close rules'],
+}
+for (const width of [375, 1440]) {
+  for (const [name, expected] of Object.entries(ROUNDS)) {
+    test(`A7 — clavier seul, ${width} px, ${name} : Tab jusqu'au dernier élément, dans l'ordre de lecture, contour visible à chaque arrêt`, async ({ page }) => {
+      await open(page, width, 900, { clock: true, version: name.includes('Lizard') ? 'bonus' : 'original' })
+      if (name === 'étape 4') {
+        await houseWill(page, 'original', 'Rock')
+        await page.keyboard.press('Tab')
+        await page.keyboard.press('Enter')
+        await page.clock.runFor(1500)
+        await expect(playAgain(page)).toBeFocused()
+      } else if (name === 'règles') {
+        await page.keyboard.press('Tab')
+        await rulesButton(page).focus()
+        await page.keyboard.press('Enter')
+        await expect(rules(page)).toBeFocused()
+        await page.keyboard.press('Tab')
+      } else {
+        await page.keyboard.press('Tab')
+      }
+      const stops = await tabRound(page)
+      expect(stops.map((s) => s.name)).toEqual(expected)
+      for (const s of stops) expect.soft(s.outline, `contour de ${s.name}`).toBe(true)
+    })
+  }
+}
+
 test.describe('toucher', () => {
   test.use({ hasTouch: true })
   test('S1 — au doigt, 375 px : une partie gagnée, Play Again', async ({ page }) => {

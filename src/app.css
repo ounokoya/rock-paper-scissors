@@ -402,6 +402,7 @@
     max-block-size: none;
     margin: 0;
     padding: 0;
+    overflow-y: auto;
     border: 0;
     background: var(--color-white);
     color: var(--color-navy);
@@ -414,7 +415,8 @@
   .rules-body {
     display: grid;
     grid-template-areas: "all";
-    min-block-size: max(100%, 34rem);
+    /* fenêtre basse : la page des règles garde 600 px de haut et défile, sans que rien ne se chevauche */
+    min-block-size: max(100%, 37.5rem);
   }
 
   .rules-title {
@@ -444,6 +446,10 @@
       outline: 0.1875rem solid var(--color-navy);
       outline-offset: 0.125rem;
     }
+  }
+
+  .rules-close-icon svg {
+    display: block;
   }
 
   .rules-scheme {
@@ -586,6 +592,7 @@
     .rules {
       inline-size: --spacing(100);
       block-size: fit-content;
+      max-block-size: calc(100% - --spacing(8));
       margin: auto;
       border-radius: 0.5rem;
     }

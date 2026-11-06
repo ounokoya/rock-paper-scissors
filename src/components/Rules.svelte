@@ -2,7 +2,7 @@
   import { onMount } from 'svelte'
   import { RULES } from '../lib/rules.js'
   import { NAMES } from '../lib/signs.js'
-  import close from '../assets/icon-close.svg'
+  import close from '../assets/icon-close.svg?raw'
   import scheme from '../assets/image-rules.svg?raw'
   import schemeBonus from '../assets/image-rules-bonus.svg?raw'
 
@@ -43,7 +43,7 @@
   <div class="rules-body">
     <h2 id="rules-title" class="rules-title">Rules</h2>
     <button type="button" class="rules-close" aria-label="Close rules" onclick={() => dialog.close()}>
-      <img src={close} alt="" width="20" height="20" />
+      <span class="rules-close-icon" aria-hidden="true">{@html close}</span>
     </button>
     <div class="rules-scheme" aria-hidden="true">{@html version === 'bonus' ? schemeBonus : scheme}</div>
     <ul class="sr-only">
