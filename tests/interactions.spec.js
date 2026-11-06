@@ -9,7 +9,10 @@ const WIDTHS = { 375: 750, 768: 1024, 1440: 900 }
 const STEP4 = { 375: { r: 64.5, mine: [94, 292], house: [282, 292] }, 768: { r: 145.5, mine: [201.5, 511], house: [566.5, 511] }, 1440: { r: 145.5, mine: [387, 511], house: [1032, 511] } }
 // Halos (D7) : un point à 1,3 rayon du centre de chaque jeton, vers le bord de la page
 const haloPoints = (w) => { const s = STEP4[w]; return { mine: [s.mine[0] - 1.3 * s.r, s.mine[1]], house: [s.house[0] + 1.3 * s.r, s.house[1]] } }
-const GAMES = [['Paper', 'Rock', 1], ['Scissors', 'Rock', 0], ['Rock', 'Rock', 0]]
+// D2 : points d'une partie. Play Again ne remet pas le score à zéro : le score attendu se cumule d'une partie à l'autre
+const POINTS = { win: 1, lose: -1, draw: 0 }
+// trois parties de suite : victoire (0 → 1), défaite (1 → 0), égalité (0 → 0)
+const GAMES = [['Paper', 'Rock'], ['Scissors', 'Rock'], ['Rock', 'Rock']]
 
 for (const [w, h] of Object.entries(WIDTHS)) {
   const width = Number(w)
@@ -19,7 +22,11 @@ for (const [w, h] of Object.entries(WIDTHS)) {
     await open(page, width, h, { clock: true })
     await expectScore(page, 0)
     const light = {}
-    for (const [mine, theirs, score] of GAMES) {
+    let score = 0
+    const shown = []
+    for (const [mine, theirs] of GAMES) {
+      const result = outcome('original', mine, theirs)
+      score += POINTS[result]
       await houseWill(page, 'original', theirs)
       await token(page, mine).click()
       await expectStep(page, 2, { mine })
@@ -31,11 +38,14 @@ for (const [w, h] of Object.entries(WIDTHS)) {
       expect((await stored(page)).original).toBe(String(score))
       await settled(page)
       const p = haloPoints(width)
-      light[outcome('original', mine, theirs)] = { mine: lum(await pixel(page, ...p.mine)), house: lum(await pixel(page, ...p.house)) }
+      light[result] = { mine: lum(await pixel(page, ...p.mine)), house: lum(await pixel(page, ...p.house)) }
       await playAgain(page).click()
       await expectStep(page, 1)
+      // Play Again garde le score
       await expectScore(page, score)
+      shown.push(score)
     }
+    expect(shown, 'scores cumulés après chaque partie').toEqual([1, 0, 0])
     // plus clair derrière le gagnant qu'à l'égalité (aucun halo), pareil du côté perdant
     expect(light.win.mine - light.draw.mine, 'halo derrière mon jeton gagnant').toBeGreaterThan(8)
     expect(Math.abs(light.win.house - light.draw.house), 'pas de halo derrière la maison perdante').toBeLessThanOrEqual(3)
@@ -49,7 +59,10 @@ for (const [w, h] of Object.entries(WIDTHS)) {
     await page.keyboard.press('Tab')
     await expect(token(page, 'Paper')).toBeFocused()
     const keys = { Paper: 'Enter', Scissors: 'Space', Rock: 'Enter' }
-    for (const [mine, theirs, score] of GAMES) {
+    let score = 0
+    for (const [mine, theirs] of GAMES) {
+      const r = outcome('original', mine, theirs)
+      score += POINTS[r]
       await expect(token(page, mine)).toBeFocused()
       await page.keyboard.press(keys[mine])
       await expectStep(page, 2, { mine })
@@ -57,7 +70,6 @@ for (const [w, h] of Object.entries(WIDTHS)) {
       await expect.poll(() => focusWithin(main(page))).toBe(true)
       await page.clock.runFor(1500)
       await expect(playAgain(page)).toBeFocused()
-      const r = outcome('original', mine, theirs)
       await expectStep(page, 4, { mine, theirs })
       await expect(status(page)).toHaveText(announce(mine, theirs, r, score))
       await expectScore(page, score)
