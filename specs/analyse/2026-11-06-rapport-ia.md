@@ -43,3 +43,23 @@ Sous 9,0 : Testing (7,8) et Accessibility (8,2).
 ## Proposition
 
 Corriger R1 à R6 en v1.0.3 (un commit par remarque, tests ajoutés), rejouer la suite en local puis en ligne, pousser et publier, puis « Regenerate report » (1 crédit) : chaque étape avec l'accord de Koya.
+
+## Rapport regénéré sur v1.0.3 (2026-11-06, accord de Koya : « Oui, publie et regénère », 1 crédit)
+
+v1.0.3 poussée (`main`, tag `v1.0.3`) et publiée (`gh-pages` ; un premier build GitHub Pages a échoué, « Page build failed », puis un second est resté bloqué ; republié, servi après 4 min) ; suite rejouée en ligne : **222 / 222**.
+
+| Partie | v1.0.2 | v1.0.3 |
+|---|---|---|
+| **Global** | 9,3 | **9,4** |
+| Code Quality | 9,4 | 9,4 : Best Practices 9,7 · File Organization 9,2 · Architecture 9,5 · Testing **8,2** (7,8) |
+| Design & UX | 8,2 | **8,7** : Accessibility **8,7** (8,2) |
+| Documentation | 9,8 | 9,8 : README **10,0** (9,9) · Commits 9,6 |
+
+Encore sous 9,0 : Testing (8,2) et Accessibility (8,7).
+
+| # | Partie | Constat | Verdict | Proposition |
+|---|---|---|---|---|
+| T1 | Testing | Les deux constats sont positifs (horloge et tirage maîtrisés, couverture souris, clavier, doigt) ; le résumé : « keeping visual assertions resilient while retaining meaningful design verification » | Juste : les tests d'`interactions.spec.js` mesurent halos, survols et contours à des coordonnées écrites en dur (centres des jetons, boîtes de Rules, du choix de version, de Play Again, de la croix) | Coordonnées tirées de la boîte réelle de chaque élément (jeton, bouton, figure) ; les positions restent vérifiées par `layout.spec.js` |
+| A1 | Accessibility | Trois constats positifs (dialogue natif, schéma décoratif et règles en texte, région de statut), aucun reproche | — | Renforcer ce que le relecteur lit : « Rules » annonce qu'il ouvre un dialogue (`aria-haspopup="dialog"`) ; le choix est annoncé à l'étape 2 (« You picked Paper. The house is picking. ») ; les jetons de l'étape 1 forment un groupe nommé (« Pick a sign ») et la zone du jeu, focalisée par le script, un groupe nommé (« Game ») ; spec §7 et tests |
+| — | File Organization, Architecture | Mêmes constats que sur v1.0.2 (doublons d'`images/`, stockage dans `game.svelte.js`), mot pour mot, mêmes notes | **Déjà corrigés en v1.0.3** (vérifié sur GitHub : `images/` sans les doublons, `src/lib/storage.js`) : ces parties n'ont pas été réévaluées | Rien à faire ; à revoir au prochain rapport |
+
