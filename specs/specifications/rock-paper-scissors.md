@@ -105,8 +105,8 @@ Positions de la maquette (px, coin haut gauche, ou centre noté « c » ; à 2 p
 | Étape 4 : mon jeton · la maison | c (350, 511) · c (995, 511) | c (94, 292) · c (282, 292) |
 | Étape 4 : libellés (haut de l'encre, centre) | y 279, x 347 · 992,5 | y 388, x 93 · 280,5 |
 | Étape 4 : résultat (haut de l'encre, centre) · Play Again | y 447, x 682 · (573, 513) 220 × 48 | y 488, x 187 · (78, 554) 220 × 48 |
-| Règles : boîte · titre (encre) · croix · schéma | (483, 177) 400 × 415 · (517, 216) · (831,5 ; 214,5) 20 × 20 · (532, 289) 304 × 270 | page entière · titre centré, encre y 102 · c (187,5 ; 674,5) · (35, 240) 304 × 270 |
-| Règles Lizard-Spock : boîte · schéma | 400 × 461, centrée · 340 × 330 | page entière · 340 × 330, centré |
+| Règles : boîte · titre (encre) · croix (encre) · schéma (encre) | (483, 177) 400 × 415 · (517, 216) 80 × 22 · (832, 215) 19 × 19 · (532, 289) 304 × 270 | page entière · (147, 102) 80 × 22 · c (188 ; 674,5) 19 × 19 · (35, 240) 304 × 270 |
+| Règles Lizard-Spock : boîte · titre · croix · schéma (encre) | (483, 154) 400 × 461 · (517, 193) · (832, 192) · (515, 238) 336 × 330 | page entière · (147, 102) · c (188 ; 674,5) · (33, 223) 310 × 304 (schéma réduit à la largeur de la page moins 60 px) |
 
 À 768 × 1024, étape 4 (G3-4) : en-tête (32, 46) 704 × 154 ; jetons c (201,5 ; 511) et c (566,5 ; 511) ; résultat sous les jetons, encre y 730, centré ; Play Again (274, 796) 220 × 48 ; Rules (606, 950). À 1440, la même mise en page qu'à 1366, centrée (décalée de 37 px).
 
@@ -122,7 +122,7 @@ Positions de la maquette (px, coin haut gauche, ou centre noté « c » ; à 2 p
 | Événement | Effet |
 |---|---|
 | Choisir un jeton (clic, toucher, Entrée ou Espace) | étape 2 (D4) ; on ne peut plus choisir ; le focus va à la zone du jeu (sans contour : ce n'est pas un contrôle) |
-| Étape 4 | le résultat est annoncé (« You picked Paper, the house picked Rock: you win. Score 13 ») ; le focus va à « Play Again » |
+| Étape 4 | le résultat est annoncé (« You picked Paper, the house picked Rock: you win. Score 13 ») ; le focus va à « Play Again » (si les règles sont ouvertes, il y reste ; à leur fermeture, il revient à « Rules ») |
 | « Play Again » | étape 1, même version ; le focus va au jeton choisi à la partie précédente |
 | « Rules » | le dialogue s'ouvre et prend le focus ; Tab reste dedans ; la croix, Échap ou (≥ 768 px) un clic sur le voile le ferment ; le focus revient à « Rules » ; la partie en cours continue derrière |
 | Choix de version | l'autre version, à l'étape 1, avec son score (D6) ; titre de la page et logo suivent ; annoncé (« Lizard-Spock. Score 3 ») ; le focus reste sur le bouton, dont le libellé change |
@@ -168,7 +168,7 @@ S3  Given le clavier seul, à chaque étape   When j'ouvre Rules, Tab jusqu'au b
 S4  Given le clavier seul, score Original 2   When Switch to Lizard-Spock, je joue Lizard contre Spock, Play Again, Switch to Original   Then 5 jetons, logo, titre de la page et score Lizard-Spock (0 puis 1) ; puis Original et son score 2 ; chaque changement annoncé ; après rechargement, la version et les deux scores retrouvés
 
 Mise en page (positions de la §5)
-S5  Given 1366 × 768 et 375 × 750, étape 1, chaque version   Then en-tête, logo, score, jetons, liens, choix de version, Rules à leurs positions
+S5  Given 1366 × 768 et 375 × 750, étape 1, chaque version   Then en-tête, logo, score, jetons, choix de version, Rules à leurs positions (les liens du triangle et du pentagone, décoratifs, sont vérifiés par S19)
 S6  Given 1366 × 768 et 375 × 750, étapes 2, 3, 4   Then libellés, jetons, place vide, résultat, Play Again à leurs positions ; Given 768 × 1024, étape 4   Then résultat et Play Again sous les jetons, à leurs positions
 S7  Given les règles à 1366 × 768 (chaque version) et à 375 × 750   Then boîte centrée sur un voile à 50 %, ou page entière et croix en bas, à leurs positions
 S8  Given 320, 375, 767, 768, 1023, 1024, 1366, 1440 px, chaque étape et les règles   Then pas de défilement horizontal ; Given 1366 × 600   Then Rules sous le jeu, sans le recouvrir
