@@ -61,3 +61,7 @@ Scénario de vérification : largeurs 375, 768, 1366 et 1440 px, et 320 px sans 
 ## Analyse validée (G2, 2026-11-06)
 
 Koya : « Je valide (G2) ». Analyse : `specs/visuel/rock-paper-scissors-analyse.md` et `.png` (canevas x 131 000). **Toutes les propositions sont retenues** : Q-A1 (croix des règles en Navy 900), Q-A2 (schéma des règles intégré, « BEATS » et flèches en #6b7087, règles aussi en texte), Q-B1 (bouton « Lizard-Spock » / « Original » à côté de « Rules », version gardée, un score par version), Q-B2 (1 s puis 0,5 s, sans mouvement si `prefers-reduced-motion`), Q-B3 (« DRAW », score inchangé ; score négatif permis), Q-B4 (jetons nommés, focus sur « Play Again », résultat annoncé), Q-B5 (survols proposés), Q-B6 (« PLAY AGAIN » navy au repos, rouge au survol), Q-L1 (desktop dès 768 px, résultat sous les jetons entre 768 et 1023 px), Q-L2 (pied d'attribution retiré, crédit dans le README).
+
+## Maquette validée (G3, 2026-11-06)
+
+Koya : « Je valide (G3) ». Maquette : `specs/visuel/penpot/maquette.md` (fichier Penpot « rock-paper-scissors »). **Tous les points sont retenus** : G3-1 (choix de version à l'étape 1 seulement ; desktop à gauche de Rules, mobile au-dessus), G3-2 (états de survol et de focus), G3-3 (règles AA, anneaux du schéma inchangés), G3-4 (tablette : résultat sous les jetons de 768 à 1023 px), G3-5 (typographies corrigées), G3-6 (seuil visuel de 5 % par écran), G3-7 (égalité « DRAW » sur la mise en page du résultat).
