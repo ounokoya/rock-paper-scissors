@@ -115,3 +115,7 @@ Résumé : « As optional polish, consider adding timed-phase negative interacti
 
 Bilan des regénérations : Testing 7,8 → 8,2 → 8,2 → 8,2 → **8,6** ; Accessibility 8,2 → **8,7** → 8,7 → 8,7 → 8,7 ; aucun constat négatif ne reste dans ces deux parties.
 
+## Décision (2026-11-06)
+
+Koya : « On s'arrête à 9,4 ». **Exception à la règle des 9,0** pour ce challenge : rapport final **9,4 / 10** sur v1.0.6, Testing 8,6 et Accessibility 8,7 sous 9,0, alors qu'aucun constat négatif ne reste dans ces deux parties et que le résumé ne propose plus que des pistes « as the project grows » (minuteries hors de `game.svelte.js`). Six rapports en tout (soumission et cinq regénérations).
+

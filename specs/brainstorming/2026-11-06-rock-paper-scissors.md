@@ -69,3 +69,8 @@ Koya : « Je valide (G3) ». Maquette : `specs/visuel/penpot/maquette.md` (fichi
 ## Verrou du code (2026-11-06)
 
 Koya : « Oui, lève le verrou ». Conditions remplies : G2 et G3 validés ; spec `specs/specifications/rock-paper-scissors.md` ; ADR-0003 à ADR-0011 (`specs/adr/v1.0/`) ; tests écrits avant le code, contrôle rouge fait (202 Playwright : 200 au rouge pour la raison attendue, 2 tests de garde ; 7 unitaires : module absent). **Qui fait quoi :** Claude télécharge `@fontsource/barlow-semi-condensed` 5.3.0 (npm, OFL-1.1, 1,6 Mo) et écrit tout le code de la Phase 6 ; Koya valide ensuite chaque publication, la soumission et la regénération du rapport.
+
+## Fin du challenge (2026-11-06)
+
+Soumis sur FM (accord de Koya : « Oui, soumets ») : https://www.frontendmentor.io/solutions/rock-paper-scissors-lizard-spock-svelte-5-tailwind-v4-playwright-XZIdVxKJa5 ; v1.0.6 publiée (https://ounokoya.github.io/rock-paper-scissors/) ; rapport IA final **9,4 / 10** (Testing 8,6, Accessibility 8,7). Koya : « On s'arrête à 9,4 » — exception à la règle des 9,0, aucun constat négatif ne restant dans ces deux parties (`specs/analyse/2026-11-06-rapport-ia.md`).
+
