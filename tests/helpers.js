@@ -33,6 +33,9 @@ function fakeRandom() {
   Math.random = () => (globalThis.__draws?.length ? globalThis.__draws.shift() : real())
 }
 export const drawFor = (version, sign) => (SIGNS[version].indexOf(sign) + 0.5) / SIGNS[version].length
+// tirages encore en file : un tirage témoin restant prouve qu'il n'y a pas eu de second tirage ; vider la file entre deux parties
+export const pendingDraws = (page) => page.evaluate(() => (globalThis.__draws ?? []).length)
+export const clearDraws = (page) => page.evaluate(() => { globalThis.__draws = [] })
 export async function houseWill(page, version, ...signs) {
   for (const s of signs) if (!SIGNS[version].includes(s)) throw new Error(`${s} n'est pas un signe de ${version}`)
   await page.evaluate((v) => { globalThis.__draws = (globalThis.__draws ?? []).concat(v) }, signs.map((s) => drawFor(version, s)))

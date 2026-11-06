@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test'
-import { open, outcome, announce, announcePick, LOGO, TITLE, houseWill, stored, main, logo, token, picked, housePicked, playAgain, rulesButton, switchButton, rules, closeRules, status, expectScore, expectStep, focusWithin, settled, lum, pixel, count, ink, WHITE } from './helpers.js'
+import { open, outcome, announce, announcePick, LOGO, TITLE, houseWill, pendingDraws, clearDraws, stored, main, logo, token, picked, housePicked, playAgain, rulesButton, switchButton, rules, closeRules, status, expectScore, expectStep, focusWithin, settled, lum, pixel, count, ink, WHITE } from './helpers.js'
 
 // Spec §6 et §8 — en tête, les parties menées au bout (S1 à la souris et au doigt, S2 au clavier seul, S3 règles, S4 versions),
 // à 375, 768 et 1440 px ; puis survols et focus (S14), mouvements (S15)
@@ -24,10 +24,20 @@ const POINTS = { win: 1, lose: -1, draw: 0 }
 // trois parties de suite : victoire (0 → 1), défaite (1 → 0), égalité (0 → 0)
 const GAMES = [['Paper', 'Rock'], ['Scissors', 'Rock'], ['Rock', 'Rock']]
 
+// D4, D6 : pendant le déroulé (étapes 2 et 3), ni second choix ni Play Again. Le test essaie quand même, à la souris (clic là où
+// était le jeton choisi) ou au clavier (Entrée, Espace sur la zone du jeu) : la partie ne bouge pas, sans tirage de plus
+async function tryAgainDuring(page, step, { mine, theirs, at, keys = [] }) {
+  await expect(playAgain(page), 'pas de Play Again pendant le déroulé').toHaveCount(0)
+  await expect(main(page).getByRole('group', { name: 'Pick a sign', exact: true }), 'plus de jetons à choisir').toHaveCount(0)
+  if (at) await page.mouse.click(at.x + at.width / 2, at.y + at.height / 2)
+  for (const key of keys) await page.keyboard.press(key)
+  await expectStep(page, step, { mine, theirs })
+}
+
 for (const [w, h] of Object.entries(WIDTHS)) {
   const width = Number(w)
 
-  test(`S1 — souris, ${w} px : gagner, perdre, égalité, chaque fois Play Again ; étapes dans l'ordre, score à l'écran et gardé, halos du gagnant`, async ({ page }) => {
+  test(`S1 — souris, ${w} px : gagner, perdre, égalité, chaque fois Play Again ; étapes dans l'ordre, sans second choix ni Play Again pendant le déroulé ; score à l'écran et gardé, halos du gagnant`, async ({ page }) => {
     // horloge de la page avancée par le test : chaque étape est vue à coup sûr (le rythme est vérifié par S10)
     await open(page, width, h, { clock: true })
     await expectScore(page, 0)
@@ -37,13 +47,20 @@ for (const [w, h] of Object.entries(WIDTHS)) {
     for (const [mine, theirs] of GAMES) {
       const result = outcome('original', mine, theirs)
       score += POINTS[result]
-      await houseWill(page, 'original', theirs)
+      // le signe de la maison, puis un tirage témoin qui doit rester en file
+      await houseWill(page, 'original', theirs, 'Paper')
+      const at = await token(page, mine).boundingBox()
       await token(page, mine).click()
       await expectStep(page, 2, { mine })
+      await tryAgainDuring(page, 2, { mine, at })
       await page.clock.runFor(1000)
       await expectStep(page, 3, { mine, theirs })
+      await tryAgainDuring(page, 3, { mine, theirs, at })
+      await expectScore(page, score - POINTS[result])
       await page.clock.runFor(500)
       await expectStep(page, 4, { mine, theirs })
+      expect(await pendingDraws(page), 'un seul tirage par partie').toBe(1)
+      await clearDraws(page)
       await expectScore(page, score)
       expect((await stored(page)).original).toBe(String(score))
       await settled(page)
@@ -63,9 +80,8 @@ for (const [w, h] of Object.entries(WIDTHS)) {
     expect(Math.abs(light.lose.mine - light.draw.mine), 'pas de halo derrière mon jeton perdant').toBeLessThanOrEqual(3)
   })
 
-  test(`S2 — clavier seul, ${w} px : trois parties (Entrée, Espace), focus sur Play Again puis sur le jeton choisi, le choix puis chaque résultat annoncés, avec le nouveau score`, async ({ page }) => {
+  test(`S2 — clavier seul, ${w} px : trois parties (Entrée, Espace), rien ne se relance pendant le déroulé, focus sur Play Again puis sur le jeton choisi, le choix puis chaque résultat annoncés, avec le nouveau score`, async ({ page }) => {
     await open(page, width, h, { clock: true })
-    await houseWill(page, 'original', 'Rock', 'Rock', 'Rock')
     await page.keyboard.press('Tab')
     await expect(token(page, 'Paper')).toBeFocused()
     const keys = { Paper: 'Enter', Scissors: 'Space', Rock: 'Enter' }
@@ -73,14 +89,20 @@ for (const [w, h] of Object.entries(WIDTHS)) {
     for (const [mine, theirs] of GAMES) {
       const r = outcome('original', mine, theirs)
       score += POINTS[r]
+      await houseWill(page, 'original', theirs, 'Paper')
       await expect(token(page, mine)).toBeFocused()
       await page.keyboard.press(keys[mine])
       await expectStep(page, 2, { mine })
       await expect(status(page)).toHaveText(announcePick(mine))
-      // le focus n'est pas perdu : il est dans la zone du jeu
+      // le focus n'est pas perdu : il est dans la zone du jeu ; Entrée et Espace n'y relancent rien
       await expect.poll(() => focusWithin(main(page))).toBe(true)
-      await page.clock.runFor(1500)
+      await tryAgainDuring(page, 2, { mine, keys: ['Enter', 'Space'] })
+      await page.clock.runFor(1000)
+      await tryAgainDuring(page, 3, { mine, theirs, keys: ['Enter', 'Space'] })
+      await page.clock.runFor(500)
       await expect(playAgain(page)).toBeFocused()
+      expect(await pendingDraws(page), 'un seul tirage par partie').toBe(1)
+      await clearDraws(page)
       await expectStep(page, 4, { mine, theirs })
       await expect(status(page)).toHaveText(announce(mine, theirs, r, score))
       await expectScore(page, score)

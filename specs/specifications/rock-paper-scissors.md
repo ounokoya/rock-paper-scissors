@@ -164,8 +164,8 @@ Animations : à l'étape 3, le jeton de la maison apparaît en grandissant (300 
 
 ```
 Parties menées au bout (en tête des tests d'interaction : souris puis clavier seul, à 375, 768 et 1440 px)
-S1  Given score 0, la maison fixée, la souris   When je joue Paper contre Rock, Scissors contre Rock, Rock contre Rock, chacune suivie de Play Again   Then étapes 2, 3, 4 dans l'ordre ; « You Win », « You Lose », « Draw » ; score 1, 0, 0 à l'écran et dans rps/score/original ; halos du côté gagnant, aucun à l'égalité ; l'étape 1 revient
-S2  Given le clavier seul   When Tab jusqu'à un jeton, Entrée (puis Espace à la partie suivante), Entrée sur Play Again   Then mêmes résultats ; le focus sur Play Again à l'étape 4, puis sur le jeton choisi ; chaque résultat annoncé
+S1  Given score 0, la maison fixée, la souris   When je joue Paper contre Rock, Scissors contre Rock, Rock contre Rock, chacune suivie de Play Again   Then étapes 2, 3, 4 dans l'ordre ; pendant les étapes 2 et 3, ni jeton ni Play Again, et un clic là où était le jeton n'a aucun effet (un seul tirage par partie, v1.0.6) ; « You Win », « You Lose », « Draw » ; score 1, 0, 0 à l'écran et dans rps/score/original ; halos du côté gagnant, aucun à l'égalité ; l'étape 1 revient
+S2  Given le clavier seul   When Tab jusqu'à un jeton, Entrée (puis Espace à la partie suivante), Entrée sur Play Again   Then mêmes résultats ; Entrée et Espace pendant les étapes 2 et 3 ne relancent rien (v1.0.6) ; le focus sur Play Again à l'étape 4, puis sur le jeton choisi ; chaque résultat annoncé
 S3  Given le clavier seul, à chaque étape   When j'ouvre Rules, Tab jusqu'au bout, Échap ; puis Rules et Entrée sur Close rules   Then le dialogue prend le focus, le garde, se ferme ; le focus revient à Rules ; la partie en cours continue
 S4  Given le clavier seul, score Original 2   When Switch to Lizard-Spock, je joue Lizard contre Spock, Play Again, Switch to Original   Then 5 jetons, logo, titre de la page et score Lizard-Spock (0 puis 1) ; puis Original et son score 2 ; chaque changement annoncé ; après rechargement, la version et les deux scores retrouvés
 
