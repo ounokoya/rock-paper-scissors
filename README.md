@@ -1,132 +1,156 @@
-# Frontend Mentor - Rock, Paper, Scissors
+# Frontend Mentor - Rock, Paper, Scissors solution
 
-![Design preview for the Rock, Paper, Scissors coding challenge](preview.jpg)
+This is a solution to the [Rock, Paper, Scissors challenge on Frontend Mentor](https://www.frontendmentor.io/challenges/rock-paper-scissors-game-pTgwgvgH). Frontend Mentor challenges help you improve your coding skills by building realistic projects.
 
-## Welcome! 👋
+## Table of contents
 
-Thanks for checking out this front-end coding challenge.
+- [Overview](#overview)
+  - [The challenge](#the-challenge)
+  - [Screenshot](#screenshot)
+  - [Links](#links)
+- [My process](#my-process)
+  - [Built with](#built-with)
+  - [Workflow](#workflow)
+  - [Tests](#tests)
+  - [What I learned](#what-i-learned)
+  - [Continued development](#continued-development)
+  - [Useful resources](#useful-resources)
+  - [AI Collaboration](#ai-collaboration)
+- [Author](#author)
+- [Acknowledgments](#acknowledgments)
 
-[Frontend Mentor](https://www.frontendmentor.io) challenges help you improve your coding skills by building realistic projects.
+## Overview
 
-**To do this challenge, you need a basic understanding of HTML, CSS and JavaScript.**
+Rock, Paper, Scissors and its Lizard-Spock version against the computer, built with Svelte 5 and Tailwind CSS v4. Pick a sign with the mouse, a finger or the keyboard; the house picks at random; the result changes the score. Each version keeps its own score, and the score and the chosen version stay after a reload. The layout follows the designs from 320 px to large screens. 223 tests, written from a spec before the code, check it.
 
-## The challenge
+### The challenge
 
-Your challenge is to build out this Rock, Paper, Scissors game and get it looking as close to the design as possible.
-
-You can use any tools you like to help you complete the challenge. So if you've got something you'd like to practice, feel free to give it a go.
-
-Your users should be able to:
+Users should be able to:
 
 - View the optimal layout for the game depending on their device's screen size
 - Play Rock, Paper, Scissors against the computer
-- **Bonus**: Maintain the state of the score after refreshing the browser
+- Maintain the state of the score after refreshing the browser
 - **Bonus**: Play Rock, Paper, Scissors, Lizard, Spock against the computer
 
-### Rules
+### Screenshot
 
-If the player wins, they gain 1 point. If the computer wins, the player loses one point.
+![Rock, Paper, Scissors on desktop: three signs on the triangle, score 12](./screenshot.jpg)
 
-#### Original
+| You win | You lose (Play Again hovered) | Rules | Lizard-Spock |
+|---|---|---|---|
+| ![Paper against Rock: You Win, halos behind my sign, score 13](./screenshots/win.jpg) | ![Scissors against Rock: You Lose, halos behind the house, score 11](./screenshots/lose.jpg) | ![Rules dialog over the game, with the rules diagram](./screenshots/rules.jpg) | ![Lizard-Spock version: five signs on the pentagon](./screenshots/lizard-spock.jpg) |
 
-- Paper beats Rock
-- Rock beats Scissors
-- Scissors beats Paper
+| Keyboard focus | Tablet, result under the signs | Mobile, a draw | Mobile rules |
+|---|---|---|---|
+| ![Scissors focused with the keyboard: white outline](./screenshots/keyboard.jpg) | ![Lizard against Spock on a tablet: You Win under the two signs](./screenshots/tablet.jpg) | ![Rock against Rock on a phone: Draw, score unchanged](./screenshots/mobile.jpg) | ![Lizard-Spock rules as a full white page on a phone](./screenshots/mobile-rules.jpg) |
 
-#### Bonus
+### Links
 
-- Scissors beats Paper
-- Paper beats Rock
-- Rock beats Lizard
-- Lizard beats Spock
-- Spock beats Scissors
-- Scissors beats Lizard
-- Paper beats Spock
-- Rock beats Scissors
-- Lizard beats Paper
-- Spock beats Rock
+- Live Site URL: [ounokoya.github.io/rock-paper-scissors](https://ounokoya.github.io/rock-paper-scissors/)
+- Repository: [github.com/ounokoya/rock-paper-scissors](https://github.com/ounokoya/rock-paper-scissors)
 
-Not sure what Rock, Paper, Scissors, Lizard, Spock is? [Check out this clip from The Big Bang Theory](https://www.youtube.com/watch?v=iSHPVCBsnLw).
+## My process
 
-### Want some support on the challenge? 
+### Built with
 
-[Join our community](https://www.frontendmentor.io/community) and ask questions in the **#help** channel.
+- Semantic HTML: the game's logo as the only `h1`, the score in the `header`, signs as buttons named after them, the picked signs as two `figure`s named "You Picked" and "The House Picked", the result as an `h2`, a native `<dialog>` for the rules, and a status region that announces each result
+- [Svelte 5](https://svelte.dev/) with runes, as a single page built with [Vite](https://vite.dev/) (no SvelteKit)
+- [Tailwind CSS v4](https://tailwindcss.com/) — tokens from the style guide and the Penpot mockup in `@theme`, default palette removed; hand-written components with logical properties and lengths from `--spacing()`
+- The game rules as pure functions (`src/lib/rules.js`): signs, who beats whom, the house's pick from a random number, the next score, reading saved values
+- Boards with fixed proportions: tokens placed in container query units (`cqi`), so the triangle and the pentagon shrink as one below 375 px
+- Barlow Semi Condensed served with the site through [Fontsource](https://fontsource.org/fonts/barlow-semi-condensed)
+- [Playwright](https://playwright.dev/), [axe-core](https://github.com/dequelabs/axe-core), the W3C Nu validator, html-validate and ESLint for tests
 
-## Where to find everything
+### Workflow
 
-Your task is to build out the project to the designs inside the `/design` folder. You can either choose the `original` designs for the simpler version or the `bonus` designs for the harder version. You will find both mobile and desktop versions of the design to work to. Each file is also named depending on which step in the game the design is for.
+Before any code, the design was analysed and rebuilt:
 
-The designs are in JPG static format. Using JPGs will mean that you'll need to use your best judgment for styles such as `font-size`, `padding` and `margin`.
+1. **Visual analysis in Excalidraw** — the 22 JPG designs measured to the pixel: screens, the flow of a game, interactive elements, a contrast audit and the questions the designs leave open (draw, switching versions, timing) → [`specs/visuel/`](./specs/visuel/)
+2. **Penpot mockup** — colour and type library, tokens with their hover and focus states, key screens matched against the designs within 0.6–3 % → [`specs/visuel/penpot/`](./specs/visuel/penpot/)
+3. **Spec, then tests** — 7 game rules, positions, states, accessible names and 19 Given/When/Then scenarios → [`specs/specifications/`](./specs/specifications/); the tests were written before the code and failed on the starter for the expected reason
+4. **Decisions** — Svelte, tokens, font, how a game unfolds, saved values, the rules dialog, layout, references, publication → [`specs/adr/`](./specs/adr/)
+5. **Code**, then a walk-through in a real browser from 320 to 1440 px → [`specs/analyse/`](./specs/analyse/)
 
-If you would like the Figma design file to inspect the design in more detail, you can [subscribe as a PRO member](https://www.frontendmentor.io/pro).
+### Tests
 
-You will find all the required assets in the `/images` folder. The assets are already optimized.
+223 tests derived from the spec, at two levels:
 
-There is also a `style-guide.md` file containing the information you'll need, such as color palette and fonts.
+- **7 unit tests** of the pure game rules (U1–U5) with Node's built-in test runner, no browser: `npm run test:unit` → [`tests/unit/`](./tests/unit/)
+- **216 Playwright tests** of every user flow (S1–S19), on the build (`npm test` runs both levels) and on the live site (`BASE_URL=https://ounokoya.github.io/rock-paper-scissors/ npx playwright test`)
 
-## Using AI coding assistants
+The tests replace `Math.random` in the page to choose the house's sign, and drive the page's clock to check each step of a game.
 
-We've included two files to help you if you're using AI coding assistants (like Claude, GitHub Copilot, Cursor, etc.) while working on this challenge:
+| What users can do | Scenarios | File |
+|---|---|---|
+| Play to the end with the mouse, then a finger, then the keyboard alone, at 375, 768 and 1440 px: win, lose and draw, each followed by Play Again; the score on screen and in storage, the halos behind the winner, each result announced; open and close the rules (Escape, the close button), focus kept in the dialog and given back, a game going on behind; switch to Lizard-Spock, win, switch back, reload | S1–S4 | [`interactions.spec.js`](./tests/interactions.spec.js) |
+| Tab through every control to the last one at each step, with a visible outline; hover and focus states measured on screen; no motion with reduced motion | A7, S14, S15 | [`interactions.spec.js`](./tests/interactions.spec.js) |
+| Get the right result for each of the 9 and 25 pairs of signs; see step 2 for 1 s and step 3 for 0.5 s, the score change only with the result; a house that picks each sign; saved values read safely; the version button at step 1 only | S9–S13 | [`game.spec.js`](./tests/game.spec.js) |
+| See the designs' positions at 1366, 768 and 375 px (within 2 px), the rules centred on desktop and as a full page on mobile, the rules usable in a short window, and no horizontal scroll from 320 px | S5–S8 | [`layout.spec.js`](./tests/layout.spec.js) |
+| axe-core at every step, in both versions and three sizes; landmarks, one `h1`, the rules as text | S16, S18, A1–A4, A10 | [`accessibility.spec.js`](./tests/accessibility.spec.js) |
+| W3C Nu, html-validate and ESLint with Frontend Mentor's settings | S17 | [`static.spec.js`](./tests/static.spec.js) |
+| The 22 designs replayed (same signs, same score) and compared with the JPG files: 0.6–3.1 % of pixels differ | S19 | [`visual.spec.js`](./tests/visual.spec.js) |
+| Rules without a browser: every pair, the house's pick, the next score, saved values; the rules return names, never colours | U1–U5 | [`rules.test.js`](./tests/unit/rules.test.js) |
+| Architecture rules: pure rules, colours only in the tokens, nothing loaded from other domains, three storage keys, no editable design file | ADR-0003–0011 | [`fitness.spec.js`](./tests/fitness.spec.js) |
 
-- `AGENTS.md` - Contains detailed instructions for AI assistants on how to help you with this challenge. It's tailored to this challenge's difficulty level, so the AI will provide guidance appropriate to your learning stage—offering more support for beginner challenges and encouraging more independence on advanced ones.
-- `CLAUDE.md` - A pointer file that directs Claude-based tools to the AGENTS.md instructions.
+### What I learned
 
-**How to use them:** You don't need to do anything! These files are automatically detected by most AI coding tools. The AI will read them and adjust its behavior to be a better learning partner—guiding you toward solutions rather than just giving you the answers.
+**A board that keeps its shape.** The tokens sit on the corners of a triangle or a pentagon. The board is a container, and each token's position and size are percentages of its width in container query units, read from the designs; below 375 px the whole board shrinks as one:
 
-**Note:** These files are designed to help you *learn*, not to do the work for you. The AI is instructed to ask questions, give hints, and explain concepts rather than writing complete solutions.
+```css
+.board {
+  container-type: inline-size;
+  inline-size: min(var(--board), 100% - --spacing(16.125));
+  aspect-ratio: 100 / var(--board-height);
+}
 
-## Building your project
+.board .token {
+  --d: calc(var(--token) * 1cqi);
+  position: absolute;
+  inset-inline-start: calc(var(--x) * 1cqi);
+  inset-block-start: calc(var(--y) * 1cqi);
+}
+```
 
-Feel free to use any workflow that you feel comfortable with. Below is a suggested process, but do not feel like you need to follow these steps:
+Every part of a token (edge, disc, icon, hover ring, halos) is a fraction of `--d`, so one token works at 95, 129, 144, 198 and 291 px.
 
-1. Initialize your project as a public repository on [GitHub](https://github.com/). Creating a repo will make it easier to share your code with the community if you need help. If you're not sure how to do this, [have a read-through of this Try Git resource](https://try.github.io/).
-2. Configure your repository to publish your code to a web address. This will also be useful if you need some help during a challenge as you can share the URL for your project with your repo URL. There are a number of ways to do this, and we provide some recommendations below.
-3. Look through the designs to start planning out how you'll tackle the project. This step is crucial to help you think ahead for CSS classes to create reusable styles.
-4. Before adding any styles, structure your content with HTML. Writing your HTML first can help focus your attention on creating well-structured content.
-5. Write out the base styles for your project, including general content styles, such as `font-family` and `font-size`.
-6. Start adding styles to the top of the page and work down. Only move on to the next section once you're happy you've completed the area you're working on.
+**Testing a game of chance.** The house's pick is the n-th sign, with n = ⌊ `Math.random()` × number of signs ⌋. The tests replace `Math.random` before the page loads and queue the draws they need, then move the page's clock with Playwright to see step 2, step 3 and the result. axe-core waits on its own timers, so the clock resumes before each accessibility check.
 
-## Deploying your project
+**A `<dialog>` that stretched.** A modal dialog is pinned to the top and bottom of the screen; with `block-size: auto` it filled the whole height. `fit-content` keeps it at the size of its content, and `max-block-size` lets it scroll in a short window. A test now opens the rules at 1366 × 400.
 
-As mentioned above, there are many ways to host your project for free. Our recommended hosts are:
+**An SVG without a `viewBox` does not scale.** The Lizard-Spock rules diagram is 340 px wide, wider than a phone's page; without a `viewBox`, the smaller SVG was cut instead of shrinking.
 
-- [GitHub Pages](https://pages.github.com/)
-- [Vercel](https://vercel.com/)
-- [Netlify](https://www.netlify.com/)
+**Focus at the right moment.** Focus moves to Play Again when the result appears, unless the rules are open. The effect also ran again when the rules closed, and took the focus away from the Rules button; reading the dialog's state with `untrack` keeps the effect tied to the result only.
 
-You can host your site using one of these solutions or any of our other trusted providers. [Read more about our recommended and trusted hosts](https://www.frontendmentor.io/guides/hosting-your-solution).
+### Continued development
 
-## Create a custom `README.md`
+- **What the designs leave open.** A draw is not drawn: it uses the result layout with "Draw", no halos and an unchanged score. There is no way to switch versions in the designs: a "Lizard-Spock" / "Original" button sits next to Rules, at step 1 only. The score can go below zero. The desktop designs are slightly off-centre; the layout keeps their positions.
+- **Accessibility.** The rules' close icon is drawn in the dark navy at full opacity (it was 1.5:1), and "BEATS" and the arrows of the rules diagram use `#6b7087` (4.9:1 instead of 2.1:1); the rules are also given as text to screen readers. Every control has a white outline, the result is announced, and nothing moves with reduced motion.
+- **Next steps.** A short history of the last games, and a way to reset the score.
 
-We strongly recommend overwriting this `README.md` with a custom one. We've provided a template inside the [`README-template.md`](./README-template.md) file in this starter code.
+### Useful resources
 
-The template provides a guide for what to add. A custom `README` will help you explain your project and reflect on your learnings. Please feel free to edit our template as much as you like.
+- [MDN — CSS container queries](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_containment/Container_queries) — container query units such as `cqi`.
+- [MDN — The Dialog element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dialog) — modal behaviour, focus and `::backdrop`.
+- [Playwright — Clock](https://playwright.dev/docs/clock) — controlling timers in the page.
+- [Svelte docs — untrack](https://svelte.dev/docs/svelte/svelte#untrack) — reading state without making it a dependency.
 
-Once you've added your information to the template, delete this file and rename the `README-template.md` file to `README.md`. That will make it show up as your repository's README file.
+### AI Collaboration
 
-## Submitting your solution
+I used **Claude (Claude Code)** as a pair, inside my own spec-driven workflow where I validated each step before the next one:
 
-Submit your solution on the platform for the rest of the community to see. Follow our ["Complete guide to submitting solutions"](https://www.frontendmentor.io/guides/how-to-submit-solutions) for tips on how to do this.
+- **Planning**: Claude proposed the scope and stack options; I chose the base game with both bonuses, Svelte 5, and the JPG designs with Penpot rather than a Figma file.
+- **Design analysis and mockup**: Claude measured the designs, drew the Excalidraw analysis and built the Penpot mockup; I reviewed both and decided how to handle what the designs leave open (draw, version switch, timing) and the contrast fixes.
+- **Spec and tests**: written by Claude before any code, from the validated mockup.
+- **Technical decisions**: Claude presented options with their trade-offs in the ADRs; I approved them, and the font download.
+- **Code**: written by Claude from the spec — I confirmed this split at the code lock — with the tests run at each step.
 
-Remember, if you're looking for feedback on your solution, be sure to ask questions when submitting it. The more specific and detailed you are with your questions, the higher the chance you'll get valuable feedback from the community.
+What worked well: the tests written first gave a precise target (each design within 5 %), and the first run pointed at real defects: the rules dialog stretched, the Lizard-Spock diagram cut on phones, Tab leaving the dialog. The walk-through in a real browser caught the rules dialog going off screen in a short window. What needed my decisions: everything the designs leave open, the contrast fixes, and every choice listed above.
 
-## Sharing your solution
+## Author
 
-There are multiple places you can share your solution:
+- Frontend Mentor - [@ounokoya](https://www.frontendmentor.io/profile/ounokoya)
+- GitHub - [@ounokoya](https://github.com/ounokoya)
 
-1. Share your solution page in the **#finished-projects** channel of the [community](https://www.frontendmentor.io/community).
-2. Share on [X (formerly Twitter)](https://x.com/frontendmentor) and mention **@frontendmentor**, including the repo and live URLs in your post. We'd love to take a look at what you've built and help share it around.
-3. Share your solution on [LinkedIn](https://www.linkedin.com/company/frontend-mentor/).
-4. Blog about your experience building your project. Writing about your workflow, technical choices, and talking through your code is a brilliant way to reinforce what you've learned. Great platforms to write on are [dev.to](https://dev.to/), [Hashnode](https://hashnode.com/), and [CodeNewbie](https://community.codenewbie.org/).
+## Acknowledgments
 
-We provide templates to help you share your solution once you've submitted it on the platform. Please do edit them and include specific questions when you're looking for feedback.
-
-The more specific you are with your questions the more likely it is that another member of the community will give you feedback.
-
-## Got feedback for us?
-
-We love receiving feedback! We're always looking to improve our challenges and our platform. So if you have anything you'd like to mention, please email hi[at]frontendmentor[dot]io.
-
-This challenge is completely free. Please share it with anyone who will find it useful for practice.
-
-**Have fun building!** 🚀
+Challenge by [Frontend Mentor](https://www.frontendmentor.io?ref=challenge): designs, icons and the rules from the starter files.
